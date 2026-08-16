@@ -39,6 +39,9 @@ settings.json
 /target/
 **/*.rs.bk
 
+# Packaged output: the installer and the portable folder
+/dist/
+
 # Node / Tauri frontend
 node_modules/
 /ui/dist/
