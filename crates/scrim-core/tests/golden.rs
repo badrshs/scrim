@@ -55,7 +55,10 @@ fn assert_matches_python(stem: &str) {
 
     assert_eq!(plan.schema_version, 1, "{stem}: fixture schema drifted");
     assert_eq!(plan.source.width, golden.frame_width, "{stem}: frame width");
-    assert_eq!(plan.source.height, golden.frame_height, "{stem}: frame height");
+    assert_eq!(
+        plan.source.height, golden.frame_height,
+        "{stem}: frame height"
+    );
 
     let windows = build_windows(&plan, &WindowParams::default());
 
@@ -129,5 +132,8 @@ fn a_clean_movie_produces_no_filtergraph() {
         plan.source.height,
         CensorStyle::BlackBox,
     );
-    assert_eq!(graph, "", "no windows and no full runs means no filter at all");
+    assert_eq!(
+        graph, "",
+        "no windows and no full runs means no filter at all"
+    );
 }

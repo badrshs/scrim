@@ -52,9 +52,15 @@ pub struct MpvOptions {
 #[derive(Debug, Clone, Serialize)]
 #[serde(tag = "kind", rename_all = "camelCase")]
 pub enum MpvEvent {
-    TimePos { seconds: f64 },
-    Duration { seconds: f64 },
-    Paused { paused: bool },
+    TimePos {
+        seconds: f64,
+    },
+    Duration {
+        seconds: f64,
+    },
+    Paused {
+        paused: bool,
+    },
     EndOfFile,
     /// mpv is gone, whether it was asked to go or not.
     Exited,
@@ -90,7 +96,9 @@ static PIPE_SEQ: AtomicU64 = AtomicU64::new(0);
 
 impl Mpv {
     /// Start mpv and connect to its IPC pipe.
-    pub async fn start(opts: MpvOptions) -> Result<(Self, mpsc::UnboundedReceiver<MpvEvent>), MpvError> {
+    pub async fn start(
+        opts: MpvOptions,
+    ) -> Result<(Self, mpsc::UnboundedReceiver<MpvEvent>), MpvError> {
         let pipe_name = format!(
             r"\\.\pipe\scrim-{}-{}",
             std::process::id(),
@@ -113,7 +121,10 @@ impl Mpv {
             .arg("--force-seekable=yes")
             .arg("--sub-auto=fuzzy")
             .arg(format!("--volume={}", opts.volume.clamp(0, 130)))
-            .arg(format!("--pause={}", if opts.paused { "yes" } else { "no" }))
+            .arg(format!(
+                "--pause={}",
+                if opts.paused { "yes" } else { "no" }
+            ))
             .stdout(Stdio::null())
             .stderr(Stdio::null());
 
@@ -202,7 +213,11 @@ impl Mpv {
             let _ = ev.send(MpvEvent::Exited);
         });
 
-        let mpv = Self { child, tx, stopping };
+        let mpv = Self {
+            child,
+            tx,
+            stopping,
+        };
 
         for (id, prop) in ["time-pos", "duration", "pause", "eof-reached"]
             .into_iter()

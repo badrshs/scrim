@@ -17,9 +17,14 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 scrim-core = { path = "../crates/scrim-core" }
+scrim-detect = { path = "../crates/scrim-detect" }
+scrim-mpv = { path = "../crates/scrim-mpv" }
+scrim-cast = { path = "../crates/scrim-cast" }
 tauri = { version = "2", features = ["devtools"] }
+tauri-plugin-dialog = "2"
 serde = { workspace = true }
 serde_json = { workspace = true }
+tokio = { version = "1", features = ["rt", "sync", "time", "macros"] }
 
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.58", features = [

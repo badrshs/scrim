@@ -170,12 +170,20 @@ fn detect_size(info: &VideoInfo) -> (i64, i64) {
     (w.max(2), h.max(2))
 }
 
-fn run(video: &Path, info: &VideoInfo, cfg: &ScanConfig, shared: &Arc<Shared>) -> Result<(), String> {
+fn run(
+    video: &Path,
+    info: &VideoInfo,
+    cfg: &ScanConfig,
+    shared: &Arc<Shared>,
+) -> Result<(), String> {
     let (dw, dh) = detect_size(info);
     let mut detector = NudeDetector::new(&cfg.model, cfg.onnxruntime.as_deref())?;
 
     let mut child = spawn_ffmpeg(&cfg.ffmpeg, video, dw, dh)?;
-    let mut stdout = child.stdout.take().ok_or("ffmpeg produced no output pipe")?;
+    let mut stdout = child
+        .stdout
+        .take()
+        .ok_or("ffmpeg produced no output pipe")?;
 
     let frame_bytes = (dw * dh * 3) as usize;
     let mut buf = vec![0u8; frame_bytes];
@@ -191,9 +199,8 @@ fn run(video: &Path, info: &VideoInfo, cfg: &ScanConfig, shared: &Arc<Shared>) -
         if shared.stop.load(Ordering::Relaxed) {
             break;
         }
-        match read_exact_or_eof(&mut stdout, &mut buf)? {
-            false => break, // clean end of stream
-            true => {}
+        if !read_exact_or_eof(&mut stdout, &mut buf)? {
+            break; // clean end of stream
         }
 
         let t = index as f64 / SAMPLE_FPS;
@@ -215,11 +222,10 @@ fn run(video: &Path, info: &VideoInfo, cfg: &ScanConfig, shared: &Arc<Shared>) -
             .collect();
 
         if !boxes.is_empty() {
-            shared
-                .detections
-                .lock()
-                .unwrap()
-                .push(Detection { t: round3(t), boxes });
+            shared.detections.lock().unwrap().push(Detection {
+                t: round3(t),
+                boxes,
+            });
         }
 
         let mut p = shared.progress.lock().unwrap();
@@ -250,7 +256,8 @@ fn spawn_ffmpeg(ffmpeg: &Path, video: &Path, w: i64, h: i64) -> Result<Child, St
         cmd.creation_flags(CREATE_NO_WINDOW);
     }
 
-    cmd.spawn().map_err(|e| format!("could not run ffmpeg: {e}"))
+    cmd.spawn()
+        .map_err(|e| format!("could not run ffmpeg: {e}"))
 }
 
 /// Fill `buf` completely, or report a clean end of stream.
@@ -280,7 +287,12 @@ mod tests {
     use super::*;
 
     fn info(w: i64, h: i64) -> VideoInfo {
-        VideoInfo { width: w, height: h, duration: 100.0, fps: 24.0 }
+        VideoInfo {
+            width: w,
+            height: h,
+            duration: 100.0,
+            fps: 24.0,
+        }
     }
 
     #[test]

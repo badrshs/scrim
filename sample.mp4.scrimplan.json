@@ -1,0 +1,21 @@
+{
+ "schema_version": 1,
+ "generator": "export_fixtures.py (python reference engine)",
+ "created_at": "2026-08-16T04:36:54.561224+00:00",
+ "source": {
+  "name": "sample.mp4",
+  "size_bytes": 22670197,
+  "duration": 120.029,
+  "fps": 23.976024,
+  "width": 1280,
+  "height": 720
+ },
+ "detector": {
+  "sample_fps": 3,
+  "threshold": 0.55,
+  "detect_width": 1280,
+  "detect_height": 720
+ },
+ "complete": true,
+ "detections": []
+}

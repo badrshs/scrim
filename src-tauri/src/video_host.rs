@@ -35,9 +35,9 @@ use windows::Win32::Graphics::Gdi::{ClientToScreen, GetStockObject, BLACK_BRUSH,
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::UI::WindowsAndMessaging::{
     CreateWindowExW, DefWindowProcW, DestroyWindow, GetClientRect, RegisterClassExW,
-    SetWindowLongPtrW, SetWindowPos, ShowWindow, GWLP_HWNDPARENT, HWND_BOTTOM, SW_HIDE,
-    SW_SHOWNOACTIVATE, SWP_NOACTIVATE, SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, WNDCLASSEXW,
-    WS_CLIPCHILDREN, WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW, WS_POPUP,
+    SetWindowLongPtrW, SetWindowPos, ShowWindow, GWLP_HWNDPARENT, SWP_NOACTIVATE, SWP_NOZORDER,
+    SW_HIDE, SW_SHOWNOACTIVATE, WNDCLASSEXW, WS_CLIPCHILDREN, WS_EX_NOACTIVATE, WS_EX_TOOLWINDOW,
+    WS_POPUP,
 };
 
 const CLASS_NAME: PCWSTR = w!("ScrimVideoStage");
@@ -144,21 +144,10 @@ impl VideoHost {
         }
     }
 
-    /// Kept for the single-window arrangement's sake; with an owned UI window
-    /// the z-order is maintained by Windows, so there is nothing to re-assert.
-    pub fn sink_to_bottom(&self) {
-        unsafe {
-            let _ = SetWindowPos(
-                self.hwnd,
-                HWND_BOTTOM,
-                0,
-                0,
-                0,
-                0,
-                SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE,
-            );
-        }
-    }
+    // There is deliberately no z-order call here. Making the video window the
+    // owner of the interface window means Windows maintains the ordering
+    // itself, so there is nothing to re-assert on resize. The single-window
+    // arrangement needed one; see docs/compositing.md for why it was dropped.
 
     /// Hide the picture without destroying the window, so stopping playback
     /// does not leave the last decoded frame frozen on screen.

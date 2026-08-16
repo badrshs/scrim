@@ -122,7 +122,11 @@ fn rust_detector_agrees_with_the_python_it_replaces() {
     let model = repo.join("resources/320n.onnx");
     let dylib = repo.join("resources/onnxruntime.dll");
 
-    for (what, path) in [("abc.mp4", &video), ("ffmpeg", &ffmpeg), ("the model", &model)] {
+    for (what, path) in [
+        ("abc.mp4", &video),
+        ("ffmpeg", &ffmpeg),
+        ("the model", &model),
+    ] {
         if !path.exists() {
             eprintln!("skipping detector parity: {what} is not present");
             return;
@@ -216,6 +220,7 @@ fn rust_detector_agrees_with_the_python_it_replaces() {
     }
 
     let _ = child.kill();
+    let _ = child.wait();
 
     println!(
         "explicit detections: {checked} in the fixture, {matched} matched, {missed} missed, {extra} extra"

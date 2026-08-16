@@ -99,7 +99,10 @@ pub fn parse(text: &str) -> Option<VideoInfo> {
 fn parse_dims(field: &str) -> Option<(i64, i64)> {
     let (w, h) = field.split_once('x')?;
     let w: i64 = w.parse().ok()?;
-    let h: i64 = h.trim_end_matches(|c: char| !c.is_ascii_digit()).parse().ok()?;
+    let h: i64 = h
+        .trim_end_matches(|c: char| !c.is_ascii_digit())
+        .parse()
+        .ok()?;
     // Guard against matching things like "0x1" in a stream id.
     if w >= 16 && h >= 16 {
         Some((w, h))
@@ -148,7 +151,8 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'abc.mp4':
 
     #[test]
     fn a_report_with_no_video_stream_is_refused() {
-        let audio_only = "  Duration: 00:03:21.00, start: 0.000000\n  Stream #0:0: Audio: mp3, 44100 Hz\n";
+        let audio_only =
+            "  Duration: 00:03:21.00, start: 0.000000\n  Stream #0:0: Audio: mp3, 44100 Hz\n";
         assert!(parse(audio_only).is_none());
     }
 }

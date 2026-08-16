@@ -68,7 +68,11 @@ pub fn discover(timeout: Duration) -> Result<Vec<Device>, String> {
                     .unwrap_or_else(|| info.get_fullname().to_owned());
                 let host = addr.to_string();
                 if !devices.iter().any(|d| d.host == host) {
-                    devices.push(Device { name, host, port: info.get_port() });
+                    devices.push(Device {
+                        name,
+                        host,
+                        port: info.get_port(),
+                    });
                 }
             }
             Ok(_) => {}
@@ -86,10 +90,7 @@ pub fn discover(timeout: Duration) -> Result<Vec<Device>, String> {
 /// ffmpeg is told to seek with `-ss`, so its clock restarts at zero while the
 /// plan's timings are relative to the start of the movie. Ported from
 /// `casting.py::shift_intervals`.
-pub fn shift_windows(
-    windows: &[scrim_window::Window],
-    offset: f64,
-) -> Vec<scrim_window::Window> {
+pub fn shift_windows(windows: &[scrim_window::Window], offset: f64) -> Vec<scrim_window::Window> {
     if offset <= 0.0 {
         return windows.to_vec();
     }
@@ -126,14 +127,22 @@ pub struct CastConfig {
 }
 
 /// A cast in progress: an HTTP server, an ffmpeg transcode, and a device.
+///
+/// The `CastDevice` itself is deliberately **not** held here. It contains an
+/// `Rc`, so it is not `Send`, and the application keeps this session in shared
+/// state that must be. So the device lives on its own thread and is spoken to
+/// over a channel; nothing that crosses this boundary is thread-unsafe.
 pub struct CastSession {
     device_name: String,
     url: String,
     stop: Arc<AtomicBool>,
     children: Arc<Mutex<Vec<Child>>>,
-    device: Option<CastDevice<'static>>,
-    transport: Option<String>,
-    session: Option<i32>,
+    control: Option<std::sync::mpsc::Sender<Control>>,
+    worker: Option<std::thread::JoinHandle<()>>,
+}
+
+enum Control {
+    Stop,
 }
 
 impl CastSession {
@@ -169,59 +178,123 @@ impl CastSession {
             std::thread::spawn(move || serve(server, cfg, stop, children));
         }
 
-        // Connect and hand over the URL.
-        let device = CastDevice::connect_without_host_verification(target.host.clone(), target.port)
-            .map_err(|e| format!("could not reach {}: {e}", target.name))?;
+        // The device is owned entirely by this thread.
+        let (ctl_tx, ctl_rx) = std::sync::mpsc::channel::<Control>();
+        let (ready_tx, ready_rx) = std::sync::mpsc::channel::<Result<(), String>>();
 
-        device
-            .connection
-            .connect(DEFAULT_RECEIVER.to_string())
-            .map_err(|e| format!("cast connect failed: {e}"))?;
-        device.heartbeat.ping().ok();
+        let host = target.host.clone();
+        let port = target.port;
+        let name = target.name.clone();
+        let media_url = url.clone();
 
-        let app = device
-            .receiver
-            .launch_app(&CastDeviceApp::DefaultMediaReceiver)
-            .map_err(|e| format!("could not start the receiver app: {e}"))?;
+        let worker = std::thread::spawn(move || {
+            let device = match CastDevice::connect_without_host_verification(host, port) {
+                Ok(d) => d,
+                Err(e) => {
+                    let _ = ready_tx.send(Err(format!("could not reach {name}: {e}")));
+                    return;
+                }
+            };
 
-        device
-            .connection
-            .connect(app.transport_id.clone())
-            .map_err(|e| format!("cast session connect failed: {e}"))?;
+            let started = (|| -> Result<(String, i32), String> {
+                device
+                    .connection
+                    .connect(DEFAULT_RECEIVER.to_string())
+                    .map_err(|e| format!("cast connect failed: {e}"))?;
+                device.heartbeat.ping().ok();
 
-        let media = Media {
-            content_id: url.clone(),
-            content_type: "video/mp4".to_string(),
-            stream_type: StreamType::Buffered,
-            duration: None,
-            metadata: None,
-        };
+                let app = device
+                    .receiver
+                    .launch_app(&CastDeviceApp::DefaultMediaReceiver)
+                    .map_err(|e| format!("could not start the receiver app: {e}"))?;
 
-        let status = device
-            .media
-            .load(app.transport_id.clone(), app.session_id.clone(), &media)
-            .map_err(|e| format!("the device refused the stream: {e}"))?;
+                device
+                    .connection
+                    .connect(app.transport_id.clone())
+                    .map_err(|e| format!("cast session connect failed: {e}"))?;
+
+                let media = Media {
+                    content_id: media_url,
+                    content_type: "video/mp4".to_string(),
+                    stream_type: StreamType::Buffered,
+                    duration: None,
+                    metadata: None,
+                };
+
+                let status = device
+                    .media
+                    .load(app.transport_id.clone(), app.session_id.clone(), &media)
+                    .map_err(|e| format!("the device refused the stream: {e}"))?;
+
+                let session = status
+                    .entries
+                    .first()
+                    .map(|e| e.media_session_id)
+                    .ok_or("the device accepted the stream but reported no session")?;
+                Ok((app.transport_id, session))
+            })();
+
+            let (transport, session) = match started {
+                Ok(v) => {
+                    let _ = ready_tx.send(Ok(()));
+                    v
+                }
+                Err(e) => {
+                    let _ = ready_tx.send(Err(e));
+                    return;
+                }
+            };
+
+            // Hold the connection open. Chromecast drops a session that stops
+            // responding, so the heartbeat has to keep going for the whole
+            // cast, not just the handshake.
+            loop {
+                match ctl_rx.recv_timeout(Duration::from_secs(4)) {
+                    Ok(Control::Stop) | Err(std::sync::mpsc::RecvTimeoutError::Disconnected) => {
+                        let _ = device.media.stop(transport.as_str(), session);
+                        return;
+                    }
+                    Err(std::sync::mpsc::RecvTimeoutError::Timeout) => {
+                        if device.heartbeat.ping().is_err() {
+                            return; // the device went away on its own
+                        }
+                    }
+                }
+            }
+        });
+
+        // Surface a refusal now rather than leaving a silent black television.
+        match ready_rx.recv_timeout(Duration::from_secs(20)) {
+            Ok(Ok(())) => {}
+            Ok(Err(e)) => {
+                stop.store(true, Ordering::Relaxed);
+                return Err(e);
+            }
+            Err(_) => {
+                stop.store(true, Ordering::Relaxed);
+                return Err(format!("{} did not answer in time", target.name));
+            }
+        }
 
         Ok(Self {
             device_name: target.name.clone(),
             url,
             stop,
             children,
-            transport: Some(app.transport_id),
-            session: status.entries.first().map(|e| e.media_session_id),
-            device: Some(device),
+            control: Some(ctl_tx),
+            worker: Some(worker),
         })
     }
 
     pub fn stop_cast(&mut self) {
         self.stop.store(true, Ordering::Relaxed);
 
-        if let (Some(device), Some(transport), Some(session)) =
-            (&self.device, &self.transport, self.session)
-        {
-            let _ = device.media.stop(transport.as_str(), session);
+        if let Some(ctl) = self.control.take() {
+            let _ = ctl.send(Control::Stop);
         }
-        self.device = None;
+        if let Some(worker) = self.worker.take() {
+            let _ = worker.join();
+        }
 
         for mut child in self.children.lock().unwrap().drain(..) {
             let _ = child.kill();
@@ -279,8 +352,7 @@ fn serve(
 }
 
 fn header(k: &str, v: &str) -> tiny_http::Header {
-    tiny_http::Header::from_bytes(k.as_bytes(), v.as_bytes())
-        .expect("static header is well formed")
+    tiny_http::Header::from_bytes(k.as_bytes(), v.as_bytes()).expect("static header is well formed")
 }
 
 fn spawn_transcode(cfg: &CastConfig) -> Result<Child, String> {
@@ -303,12 +375,30 @@ fn spawn_transcode(cfg: &CastConfig) -> Result<Child, String> {
     }
 
     cmd.args([
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
-        "-maxrate", "8M", "-bufsize", "16M", "-pix_fmt", "yuv420p",
-        "-c:a", "aac", "-b:a", "160k", "-ac", "2",
+        "-c:v",
+        "libx264",
+        "-preset",
+        "veryfast",
+        "-crf",
+        "21",
+        "-maxrate",
+        "8M",
+        "-bufsize",
+        "16M",
+        "-pix_fmt",
+        "yuv420p",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "160k",
+        "-ac",
+        "2",
         // Fragmented MP4 so playback can begin before the file exists.
-        "-movflags", "frag_keyframe+empty_moov+default_base_moof",
-        "-f", "mp4", "pipe:1",
+        "-movflags",
+        "frag_keyframe+empty_moov+default_base_moof",
+        "-f",
+        "mp4",
+        "pipe:1",
     ])
     .stdout(Stdio::piped())
     .stderr(Stdio::null());
@@ -319,7 +409,8 @@ fn spawn_transcode(cfg: &CastConfig) -> Result<Child, String> {
         cmd.creation_flags(CREATE_NO_WINDOW);
     }
 
-    cmd.spawn().map_err(|e| format!("could not run ffmpeg: {e}"))
+    cmd.spawn()
+        .map_err(|e| format!("could not run ffmpeg: {e}"))
 }
 
 /// The address on this machine that the given device can actually reach.
@@ -333,7 +424,9 @@ fn local_ip_towards(peer: &str) -> Result<IpAddr, String> {
         .parse()
         .map_err(|_| format!("{peer} is not an address we can route to"))?;
     // UDP connect assigns a local address without sending anything.
-    socket.connect(target).map_err(|e| format!("connect: {e}"))?;
+    socket
+        .connect(target)
+        .map_err(|e| format!("connect: {e}"))?;
     socket
         .local_addr()
         .map(|a| a.ip())
@@ -370,7 +463,14 @@ mod tests {
     use super::*;
 
     fn w(start: f64, end: f64) -> Window {
-        Window { start, end, x: 10, y: 20, w: 30, h: 40 }
+        Window {
+            start,
+            end,
+            x: 10,
+            y: 20,
+            w: 30,
+            h: 40,
+        }
     }
 
     #[test]
@@ -387,7 +487,10 @@ mod tests {
     fn shifting_keeps_the_box_untouched() {
         // Only time moves. Moving the rectangle too would uncover the subject.
         let shifted = shift_windows(&[w(100.0, 110.0)], 50.0);
-        assert_eq!((shifted[0].x, shifted[0].y, shifted[0].w, shifted[0].h), (10, 20, 30, 40));
+        assert_eq!(
+            (shifted[0].x, shifted[0].y, shifted[0].w, shifted[0].h),
+            (10, 20, 30, 40)
+        );
     }
 
     #[test]

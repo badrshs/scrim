@@ -1,0 +1,15 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "What Scrim's own interface is allowed to do. Deliberately narrow: the window, and file pickers for choosing movies and subtitles. No filesystem, shell, HTTP or process access is granted, because the interface never needs any of it; everything that touches the disk or the network happens in Rust.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-minimize",
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-close",
+    "core:window:allow-set-fullscreen",
+    "core:window:allow-start-dragging",
+    "dialog:allow-open"
+  ]
+}

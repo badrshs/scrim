@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      # The tests that need ffmpeg or the model skip cleanly without them, but
+      # skipping the ffmpeg acceptance test would hide exactly the class of bug
+      # it exists to catch, so CI always fetches the real thing.
+      - name: Fetch bundled binaries
+        run: powershell -File tools/fetch-resources.ps1
+
+      - name: Formatting
+        run: cargo fmt --all --check
+
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Tests
+        run: cargo test --workspace
+
+      - name: Build
+        run: cargo build --release -p scrim
+
+  # A build is not proof that it runs somewhere else. This unpacks the portable
+  # folder on a clean runner with no Rust, no Python, no mpv and no ffmpeg
+  # installed, and checks the application starts.
+  clean-machine:
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - run: powershell -File tools/fetch-resources.ps1
+      - run: powershell -File tools/package.ps1 -SkipTests -SkipInstaller
+
+      - name: Start the portable build and check it stays up
+        shell: powershell
+        run: |
+          $exe = Get-ChildItem dist -Recurse -Filter scrim.exe | Select-Object -First 1
+          if (-not $exe) { throw "no scrim.exe in dist" }
+          $p = Start-Process $exe.FullName -PassThru
+          Start-Sleep -Seconds 20
+          if ($p.HasExited) { throw "Scrim exited on startup with $($p.ExitCode)" }
+          Stop-Process -Id $p.Id -Force
+          Write-Host "started and stayed up"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scrim-portable
+          path: dist/*.zip
+          retention-days: 14

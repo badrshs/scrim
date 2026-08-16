@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release"
+        required: true
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Install the Tauri CLI
+        run: cargo install tauri-cli --version "^2" --locked
+
+      - name: Fetch bundled binaries
+        run: powershell -File tools/fetch-resources.ps1
+
+      - name: Test
+        run: cargo test --workspace
+
+      - name: Package
+        run: powershell -File tools/package.ps1 -SkipTests
+
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          draft: true
+          generate_release_notes: true
+          files: |
+            dist/*.zip
+            dist/*.exe
+          body: |
+            Scrim, a video player that covers explicit content locally.
+
+            **Installer** for the usual case, **portable zip** if you would
+            rather not install anything. Both carry their own mpv, ffmpeg,
+            ONNX Runtime and detection model, so nothing else is needed.
+
+            Windows 10 or 11, 64-bit.
+
+            Licensed AGPL-3.0-or-later. Bundled components and their licences
+            are listed in THIRD-PARTY.md.

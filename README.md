@@ -1,187 +1,310 @@
-# PureFrame Player - full business logic (A to Z)
+<div align="center">
 
-A desktop app for watching movies with explicit content covered up, built for
-one requirement above all others: **an uncensored frame must never reach the
-screen**. Everything below follows from that rule.
+# Scrim
 
-IMPORTANT: any code change to this project must update this README so it
-always describes the real behavior. See `.claude/CLAUDE.md`.
+**Watch movies with explicit content covered up. Everything runs on your own machine.**
+
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-4FE3C1.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows_10%2F11-8A959E.svg)](#installing)
+
+</div>
+
+Scrim plays a movie and covers explicit nudity with a black box, a white box,
+or a blur, composited live as the film plays. The original file is never
+modified and never re-encoded.
+
+It is built around one rule, and every design decision in it defers to that
+rule:
+
+> **An uncovered frame must never reach the screen or a cast device.**
+
+Where Scrim has to choose, it over-covers. A box that is bigger than it needed
+to be is a cosmetic complaint. A frame that slipped through is the only bug
+that matters.
 
 ---
 
-## 1. What gets censored
+## Contents
 
-Only **explicit nudity and visible sex acts**. Detection is done by the
-NudeNet AI model (visual only). The labels that trigger censoring
-(`EXPLICIT_LABELS` in pureframe, threshold 0.55):
+- [What gets covered](#what-gets-covered)
+- [The two ways to watch](#the-two-ways-to-watch)
+- [Timing](#timing)
+- [How the covering works](#how-the-covering-works)
+- [Casting](#casting)
+- [Subtitles](#subtitles)
+- [Privacy](#privacy)
+- [Installing](#installing)
+- [Building from source](#building-from-source)
+- [How it is put together](#how-it-is-put-together)
+- [Tests](#tests)
+- [Settings](#settings)
+- [Files Scrim creates](#files-scrim-creates)
+- [Known limitations](#known-limitations)
+- [Licence](#licence)
 
-- FEMALE_BREAST_EXPOSED, FEMALE_GENITALIA_EXPOSED
-- MALE_GENITALIA_EXPOSED, BUTTOCKS_EXPOSED, ANUS_EXPOSED
+---
 
-Not censored, by explicit decision: kissing, suggestive scenes, covered
-bodies, violence. Audio is never analyzed and never modified. In older plans
-that contain kissing categories, playback filters them out
-(`pfplay.BLUR_LEVELS["nudity"]` is the hardwired default).
+## What gets covered
 
-## 2. The two playback modes
+Explicit nudity and visible sex acts. Nothing else.
 
-### Scanned plan mode
-1. A one-time scan produces `<movie>.censorplan.json` next to the video
-   (shots + verdicts + boxes, pureframe pydantic schema).
-2. Play converts the plan into blur windows and starts embedded mpv with a
-   time-gated ffmpeg filtergraph. The original file is never re-encoded.
-3. Fail closed: no plan file, or a plan that fails validation = refuse to
-   play in this mode.
+Detection is the NudeNet model, running locally. These five classes trigger
+covering, above a confidence of 0.55:
 
-### Live detection mode
-1. Play starts `livescan.LiveScanner`: ffmpeg feeds frames at 3 fps into
-   NudeNet (17 ms/frame on this CPU, roughly 20x faster than playback).
-2. Playback starts after the chosen head start (1-10 min, default 5), or
-   immediately when the whole movie is analyzed, whichever comes first.
-3. Newly found windows are pushed into the running mpv every ~20 s over IPC
-   (`vf set`), no playback interruption.
-4. Safety fences while the scan is unfinished:
-   - seek past `frontier - 5s`: snap back to `frontier - 30s`
-   - playback reaches `frontier - 15s`: auto-pause, auto-resume at 45 s gap
-   - fences lift when the scan completes
-5. A completed live pass saves a normal censor plan, so the next watch of
-   that movie is instant Scanned-plan mode.
-
-## 3. Timing rules (both modes)
-
-For every run of consecutive detections:
-
-- censoring starts **5 s before** the first detection (`LEAD_BEFORE`)
-- censoring holds **10 s after** the last detection (`HOLD_AFTER` /
-  livescan `PAD_AFTER`)
-- detections closer together than the merge gap join into one run
-- box regions are unioned over ~1.5-2 s windows with a margin (4% plan
-  mode, 8% live mode - live samples sparser so it pads more)
-- when overlapping windows disagree (a hold running into a fresh
-  detection), the newest detection's position wins
-- a flagged span with no usable box data becomes full-frame censoring
-  (over-censor, never under-censor)
-- graph size is capped (~400 windows); beyond it, spans merge or escalate
-  to full-frame rather than truncate silently
-
-## 4. Censor appearance (Censor picker, applies live)
-
-- Black box (default), White box: `drawbox` fill, nothing visible
-- Blur strong / medium / light: `boxblur`, see-through by design
-- Changing the picker while playing rebuilds the filtergraph and applies it
-  instantly over mpv IPC, no restart, no rescan. Same for casting: the
-  selected style is baked into the cast stream.
-
-## 5. The rendering pipeline
-
-One shared engine (`pfplay.build_graph`) produces a single-chain ffmpeg
-graph: `split -> crop(x,y move per frame via time expressions) -> censor ->
-overlay`, plus one full-frame censor filter for full-frame intervals. Times
-are gated with `enable='between(t,..)'` so seeking is always correct.
-Design constraint learned the hard way: one chain per detection window
-(48 chains) grinds mpv's filter bridge to a halt; the single moving chain
-runs at 16-20x realtime.
-
-## 6. The player (player_app.py)
-
-- Tkinter window; mpv renders embedded via `--wid`, controlled over a
-  Windows named pipe (JSON IPC). The pipe is switched to PIPE_NOWAIT
-  because blocking reads on a duplex pipe handle deadlock writes.
-- Library list with per-movie status: Ready / Scanning / Not scanned.
-  Plans created outside the app are noticed automatically (5 s poll).
-- Controls: play/pause (space), stop, live-scrub seek bar (keyframe seeks
-  while dragging at max ~8/s, exact seek on release), volume, fullscreen
-  (Esc exits), time readout.
-- Scan button runs `pureframe plan <file> --no-audio --no-clip` with
-  HuggingFace forced offline once models are cached (their update pings
-  rate-limit and have stalled scans). Warns if another scan is running.
-  Interrupted scans resume from pureframe's checkpoint DB.
-- Review flagged: opens pureframe's HTML contact sheet of detections.
-- Heavy AI imports load lazily in a background thread after the window
-  appears (cold-start freeze fix).
-
-## 7. Subtitles
-
-- Auto-loads subtitle files sitting next to the movie (`--sub-auto=fuzzy`).
-- The Subtitle button attaches an external .srt/.ass/.ssa/.vtt/.sub; if the
-  movie is playing it applies immediately (`sub-add`), otherwise on next
-  play. Remembered per movie.
-- Sync buttons − / + nudge subtitle delay by 0.25 s per click, applied live
-  (`sub-delay`) and remembered per movie.
-
-## 8. Casting (Chromecast)
-
-- Cast button: discovers devices (pychromecast), picker if more than one.
-- The stream is transcoded on the PC by ffmpeg with the censor filter
-  **burned into the pixels** (x264 veryfast, aac, fragmented MP4 over a
-  local HTTP server on a random port). The TV never receives an uncensored
-  frame; there is nothing to bypass on the device.
-- Casting mid-movie: censor timings are shifted by the start offset so
-  boxes stay in sync (`casting.shift_intervals`).
-- Fail closed: casting requires a finished plan (scan or completed live
-  pass). Live-in-progress cannot be cast.
-- Known limits: no seek/pause from the TV (live-generated stream); stop
-  and re-cast instead. First cast may need a Windows Firewall allow for
-  Python. Local playback stops when a cast starts (one pipeline at a time).
-
-## 9. Files this app creates
-
-| File | What it is |
+| | |
 |---|---|
-| `<movie>.censorplan.json` | detection plan (shots, verdicts, boxes) |
-| `library.json` | movie list, subtitle paths, subtitle delays |
-| `current_play.conf` | mpv config with the filtergraph for this playback |
-| `~\panns_data\*` | audio model files (legacy, audio analysis now off) |
-| `~\.cache\huggingface\*` | CLIP model cache (legacy, CLIP now off) |
+| `FEMALE_BREAST_EXPOSED` | `FEMALE_GENITALIA_EXPOSED` |
+| `MALE_GENITALIA_EXPOSED` | `BUTTOCKS_EXPOSED` |
+| `ANUS_EXPOSED` | |
 
-## 10. Privacy
+**Not** covered, by deliberate decision: kissing, suggestive scenes, clothed
+bodies, and violence. Audio is never analysed and never altered. Widening this
+list is a change to what the product is, not a setting.
 
-Everything runs locally. The movie, frames, and audio never leave the
-machine (cast streams go only to the chosen device on the LAN). The only
-network traffic is one-time model downloads; scans run with HuggingFace
-offline mode once models are cached. No telemetry anywhere in the stack
-(pureframe's code was audited in-session: no network clients, no exec/eval,
-no pickle loads outside torch's safe path).
+## The two ways to watch
 
-## 11. Known limitations (honest list)
+### Scanned plan
 
-- Detection is NudeNet's accuracy: it can miss things (especially brief
-  flashes under ~1/3 s in live mode's 3 fps sampling) and false-positive on
-  skin (a shirtless torso may occasionally flag). Review flagged exists for
-  auditing; the 5 s lead / 10 s hold absorb most timing misses.
-- The pureframe batch scanner stalls on long videos on this machine
-  (frozen after model load, twice). Live mode's scanner is the reliable
-  path and produces the same plan; the Scan button remains for short files.
-- Cast streams are not seekable (see section 8).
-- One playback pipeline at a time: casting stops local playback.
+1. Scan the movie once. Scrim walks it at 3 frames per second, roughly fifteen
+   times faster than playback, and writes `<movie>.scrimplan.json` beside it.
+2. Press play. The plan becomes a filtergraph and the movie starts immediately,
+   fully covered from the first frame.
 
-## 12. Environment (already set up in this checkout)
+**Fails closed.** No plan, an unreadable plan, or a scan that never finished
+means Scrim refuses to play in this mode. It will offer live detection instead
+rather than guess.
 
-- `.venv` with CUDA torch (`--index-url .../cu124`), `pureframe==0.1.0b15`,
-  `opencv-python<5` (OpenCV 5 removed the Caffe API pureframe needs),
-  `pychromecast`.
-- mpv via `scoop install mpv`; ffmpeg on PATH (chocolatey).
-- Desktop shortcut "PureFrame Player" runs
-  `.venv\Scripts\pythonw.exe player_app.py`.
+### Live detection
 
-## 13. CLI (advanced, same engine as the app)
+For when you want to start now.
 
-```powershell
-.\.venv\Scripts\python.exe pfplay.py scan movie.mp4
-.\.venv\Scripts\python.exe pfplay.py play movie.mp4 [--dump]
-    [--style black|white|blur] [--strength light|medium|strong]
-    [--blur nudity|kissing|all]   # what categories to censor
+1. Detection starts, and playback waits for it to build a head start
+   (1 to 10 minutes, 5 by default), or until the scan finishes, whichever comes
+   first.
+2. Newly found regions are pushed into the running movie every 20 seconds. No
+   interruption, no restart.
+3. Playback is **fenced** behind the detection frontier the whole time:
+
+   ```
+   ...........................|--- 15s ---|-5s-|
+   safe to watch               pause here       frontier
+                                                |
+                     a seek past here snaps back to frontier - 30s
+   ```
+
+   - seek past `frontier - 5s` → snapped back to `frontier - 30s`
+   - playback reaches `frontier - 15s` → pauses on its own
+   - resumes once detection is 45 seconds ahead again
+   - every fence lifts the moment the scan completes
+
+4. A completed live pass saves a normal plan, so the next viewing starts
+   instantly.
+
+The seek bar shows all of this: covered spans as ticks, and the region
+detection has not reached as a hatched area you can see and cannot enter.
+
+## Timing
+
+For each run of detections:
+
+- covering starts **5 seconds before** the first detection
+- covering holds **10 seconds after** the last one
+- detections less than 1.5 seconds apart join into one run
+- boxes are unioned over a window and grown by 8% of the frame on each side
+- where windows overlap, the newer detection's position wins
+- a flagged span with no usable box becomes a full-frame cover
+
+Every one of these trades a larger box for a smaller chance of missing
+something.
+
+## How the covering works
+
+One ffmpeg filtergraph, applied by mpv during playback:
+
+```
+split ─┬─────────────────────────────► overlay ──► out
+       └─ crop(x(t), y(t)) ─► cover ─┘
 ```
 
-## 14. Tunables (constants at the top of the files)
+A **single** chain whose crop and overlay coordinates move over time through
+per-frame expressions. This matters: one chain per covered region (48 of them
+on a real film) grinds mpv's filter bridge to a halt, while one moving chain
+runs at 16-20x realtime.
 
-| Where | Constant | Meaning | Current |
-|---|---|---|---|
-| pfplay.py | LEAD_BEFORE | censor lead before a run | 5 s |
-| pfplay.py | HOLD_AFTER | censor hold after a run | 10 s |
-| pfplay.py | BOX_MARGIN | box padding (plan mode) | 4% |
-| pfplay.py | MAX_CHAINS | window cap before escalation | 400 |
-| livescan.py | SAMPLE_FPS | live detection sampling | 3 fps |
-| livescan.py | THRESHOLD | NudeNet confidence cutoff | 0.55 |
-| livescan.py | PAD_BEFORE / PAD_AFTER | live lead / hold | 5 s / 10 s |
-| livescan.py | MARGIN | box padding (live mode) | 8% |
+There is a hard limit here worth knowing about. ffmpeg's expression parser
+gives up at 99 levels of recursion, and this graph nests one level per covered
+window, so Scrim caps windows at 90 and merges harder above that. This is not a
+performance tuning knob: a graph ffmpeg rejects makes mpv drop the filter and
+play the movie **uncovered**. See [docs/expression-limit.md](docs/expression-limit.md).
+
+Changing the cover style while watching rebuilds the graph and applies it over
+mpv's IPC socket. No restart, no rescan.
+
+## Casting
+
+Scrim casts to Chromecast by transcoding on this machine with the cover
+**burned into the pixels**, and serving that over your local network.
+
+The device never receives the original file. There is nothing on the
+television to bypass, because the television is not making the decision.
+
+- Requires a **finished** scan. A live scan in progress cannot be cast: the end
+  of the movie has not been looked at, and a stream cannot be fenced once it has
+  left this machine.
+- Local playback stops first. One heavy pipeline at a time.
+- Casting from part way in shifts the cover timings to match.
+- The stream is not seekable from the TV. Stop and cast again instead.
+
+## Subtitles
+
+Files sitting next to the movie load automatically. The **SUB** button attaches
+an `.srt`, `.ass`, `.ssa`, `.vtt` or `.sub` by hand, applied immediately if
+something is playing. The sync buttons nudge timing by 0.25 s per press. Both
+are remembered per movie.
+
+## Privacy
+
+Everything happens on your machine. The movie, the frames, and the audio never
+leave it. Cast streams go only to the device you pick, on your own network.
+
+Scrim makes **no** network requests of any kind: no telemetry, no update
+checks, no model downloads at runtime, not even a web font. The typefaces are
+part of the application.
+
+## Installing
+
+Download the installer from [Releases](../../releases), or take the portable
+zip and run `scrim.exe` from anywhere. Nothing else is needed: Scrim carries
+its own mpv, ffmpeg, ONNX Runtime and detection model.
+
+Windows 10 or 11, 64-bit. WebView2 is already present on Windows 11 and on
+current Windows 10; the installer fetches it if it is not.
+
+## Building from source
+
+You need the **Rust toolchain** and the **MSVC C++ build tools**. There is no
+Node, no npm and no bundler: the interface is plain static files.
+
+```powershell
+git clone https://github.com/<you>/scrim
+cd scrim
+
+# mpv, ffmpeg, onnxruntime and the model (about 276 MB, hash-pinned)
+powershell -File tools/fetch-resources.ps1
+
+# cl.exe is only on PATH inside a developer prompt
+. .\tools\msvc-env.ps1
+
+cargo test --workspace
+cargo build --release -p scrim
+```
+
+Bundle an installer and a portable folder:
+
+```powershell
+powershell -File tools/package.ps1
+```
+
+> **Note when changing the interface:** `ui/` is embedded into the executable
+> at compile time, so editing HTML, CSS or JS requires `cargo build` before the
+> change appears. This surprises everyone once.
+
+## How it is put together
+
+```
+crates/
+  scrim-core/     what gets covered: plan schema, window building, filtergraph
+  scrim-detect/   ffmpeg frame pipe → NudeNet ONNX → detections
+  scrim-mpv/      mpv process and its JSON IPC pipe
+  scrim-cast/     Chromecast discovery and the censored transcode
+src-tauri/        commands, playback state machine, the safety fences
+ui/               the interface: HTML, CSS, plain modules
+resources/        bundled mpv, ffmpeg, onnxruntime, model (not in git)
+```
+
+`scrim-core` decides what gets covered and depends on nothing but `serde`, so
+all of it is testable from a JSON fixture with no video, no GPU and no window.
+
+The picture and the interface live in **two** windows: mpv renders into its own
+borderless window, which *owns* the interface window so Windows keeps the
+interface above it. The obvious single-window arrangement does not work, and
+[docs/compositing.md](docs/compositing.md) explains why in detail.
+
+## Tests
+
+```powershell
+cargo test --workspace
+```
+
+Three of these are load-bearing:
+
+**Golden filtergraphs.** The Python this project replaced was run over both
+real test movies and its output recorded. The Rust must reproduce every window
+and every filtergraph **byte for byte**, across all five cover styles. Shifting
+the censor lead by 100 ms fails it immediately.
+
+**ffmpeg acceptance.** Every graph Scrim can build is handed to the real ffmpeg
+and must be accepted. The golden tests cannot catch an invalid graph, because
+the Python was producing one too.
+
+**Detector parity.** The Rust detector is run over the same frames as the
+Python `nudenet`, and every explicit region the Python found must be
+reproduced. Currently 32 of 32, mean IoU 0.9916.
+
+Tests that need `resources/` or the sample movies skip cleanly without them.
+
+## Settings
+
+| Setting | Meaning | Default |
+|---|---|---|
+| Theme | light, dark, or follow the system | system |
+| Lead before | start covering this long before a detection | 5.0 s |
+| Hold after | keep covering this long after | 10.0 s |
+| Live head start | how far ahead detection gets before playback | 5 min |
+| Window cap | maximum covered windows in one graph | 90 |
+| Confidence cutoff | NudeNet score below which a region is ignored | 0.55 |
+| Live sampling | frames per second fed to the detector | 3 fps |
+| Box margin | how much each box grows on every side | 8% |
+
+Timing settings re-derive coverage instantly, because plans store raw
+detections rather than pre-built windows. Changing the lead does not mean
+rescanning a film.
+
+**The video area stays dark in every theme.** Light theme applies to the window
+chrome, library, settings and dialogs. A white control bar over a movie frame
+blows out the picture and hurts in a dark room.
+
+## Files Scrim creates
+
+| File | Where | What |
+|---|---|---|
+| `<movie>.scrimplan.json` | next to the movie | detections from a scan |
+| `library.json` | `%APPDATA%\app.scrim.player` | your movie list and per-movie state |
+| `settings.json` | `%APPDATA%\app.scrim.player` | your settings |
+| `current_play.conf` | `%APPDATA%\app.scrim.player` | the filtergraph for this playback |
+
+## Known limitations
+
+- **Detection is only as good as NudeNet.** It can miss things, especially
+  flashes shorter than a third of a second at 3 fps sampling, and it
+  occasionally flags a bare torso. The 5 s lead and 10 s hold absorb most
+  timing misses, but this is a tool, not a guarantee about a specific film.
+- **Dense films get larger boxes.** Above 90 covered windows Scrim merges into
+  longer spans, so the box grows to the union of a longer stretch. Forced by
+  ffmpeg's expression limit; the alternative is a graph that covers nothing.
+- **Cast streams are not seekable** and cannot be paused from the television.
+- **One pipeline at a time.** Casting stops local playback.
+- **Windows only** for now. The core crates are platform-agnostic; the window
+  embedding and the IPC pipe are not.
+
+## Licence
+
+**AGPL-3.0-or-later.** See [LICENSE](LICENSE).
+
+Scrim bundles the NudeNet detection weights, which are AGPL-3.0, so Scrim is
+too. For a desktop video player this costs users nothing: the network clause
+only applies to software offered to others over a network, and Scrim never is.
+It does mean anyone distributing a modified Scrim must publish their changes.
+
+Bundled components and their licences are listed in
+[THIRD-PARTY.md](THIRD-PARTY.md).

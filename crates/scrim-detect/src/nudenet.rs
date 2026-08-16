@@ -126,7 +126,12 @@ impl NudeDetector {
     }
 
     /// Detect on one packed BGR frame.
-    pub fn detect(&mut self, bgr: &[u8], width: usize, height: usize) -> Result<Vec<Detection>, String> {
+    pub fn detect(
+        &mut self,
+        bgr: &[u8],
+        width: usize,
+        height: usize,
+    ) -> Result<Vec<Detection>, String> {
         if bgr.len() < width * height * 3 {
             return Err("frame buffer is smaller than its stated dimensions".into());
         }

@@ -1,0 +1,49 @@
+/* IBM Plex, served from the application itself.
+ *
+ * The design mock loaded these from Google Fonts. Scrim cannot: an app whose
+ * whole claim is that your movies never leave your machine has no business
+ * asking a CDN for a typeface every time it opens. The files are vendored in
+ * ui/fonts/ under the SIL Open Font License.
+ *
+ * Latin subset only, which is what the interface uses. Filenames render in
+ * whatever the system provides if they fall outside it. */
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../fonts/plex-sans-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("../fonts/plex-sans-500.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url("../fonts/plex-sans-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../fonts/plex-mono-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  src: url("../fonts/plex-mono-500.woff2") format("woff2");
+}

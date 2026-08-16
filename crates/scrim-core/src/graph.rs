@@ -118,14 +118,8 @@ pub fn build_graph(
             .map(|win| {
                 // NOTE: `win.w - bw` is normally negative, so this needs
                 // Python's floor division. See util::floor_div.
-                let nx = floor_div(
-                    (win.x + floor_div(win.w - bw, 2)).max(0).min(fw - bw),
-                    2,
-                ) * 2;
-                let ny = floor_div(
-                    (win.y + floor_div(win.h - bh, 2)).max(0).min(fh - bh),
-                    2,
-                ) * 2;
+                let nx = floor_div((win.x + floor_div(win.w - bw, 2)).max(0).min(fw - bw), 2) * 2;
+                let ny = floor_div((win.y + floor_div(win.h - bh, 2)).max(0).min(fh - bh), 2) * 2;
                 (win.start, win.end, nx, ny)
             })
             .collect();
@@ -146,10 +140,7 @@ pub fn build_graph(
     }
 
     if !full_runs.is_empty() {
-        parts.push(format!(
-            "{cur}{censor}:enable='{}'",
-            enable_expr(full_runs)
-        ));
+        parts.push(format!("{cur}{censor}:enable='{}'", enable_expr(full_runs)));
     } else if !windows.is_empty() {
         // Strip the trailing label so the graph's output pad is unnamed,
         // which is what mpv's lavfi wrapper expects.

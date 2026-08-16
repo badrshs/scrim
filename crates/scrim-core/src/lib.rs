@@ -44,7 +44,11 @@ impl Coverage {
     /// viewer knows what they are in for before pressing play.
     pub fn covered_seconds(&self) -> f64 {
         self.windows.iter().map(|w| w.duration()).sum::<f64>()
-            + self.full_runs.iter().map(|(s, e)| (e - s).max(0.0)).sum::<f64>()
+            + self
+                .full_runs
+                .iter()
+                .map(|(s, e)| (e - s).max(0.0))
+                .sum::<f64>()
     }
 
     pub fn graph(&self, fw: i64, fh: i64, style: CensorStyle) -> String {
@@ -85,7 +89,10 @@ mod tests {
         // Touching exactly is still one span.
         assert_eq!(merge_overlaps(&[(0.0, 5.0), (5.0, 8.0)]), vec![(0.0, 8.0)]);
         // A span fully inside another does not shorten it.
-        assert_eq!(merge_overlaps(&[(0.0, 10.0), (2.0, 4.0)]), vec![(0.0, 10.0)]);
+        assert_eq!(
+            merge_overlaps(&[(0.0, 10.0), (2.0, 4.0)]),
+            vec![(0.0, 10.0)]
+        );
         assert!(merge_overlaps(&[]).is_empty());
     }
 
