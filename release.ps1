@@ -52,6 +52,23 @@ function Ok($text) { Write-Host "  $text" -ForegroundColor Green }
 function Note($text) { Write-Host "  $text" -ForegroundColor DarkGray }
 function Warn($text) { Write-Host "  $text" -ForegroundColor Yellow }
 
+# Run a native command that is ALLOWED to fail, and report only its exit code.
+#
+# Windows PowerShell turns anything a native program writes to stderr into an
+# ErrorRecord, and with $ErrorActionPreference = "Stop" that aborts the script.
+# `gh release view` printing "release not found" is a normal answer to a
+# question, not a failure, and so is `git describe` on the first release.
+function Test-Native {
+    param([Parameter(Mandatory)][scriptblock]$Command)
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        & $Command 2>&1 | Out-Null
+        return $LASTEXITCODE -eq 0
+    }
+    finally { $ErrorActionPreference = $previous }
+}
+
 # ---------------------------------------------------------------- checks ---
 
 Step "checks"
@@ -66,11 +83,9 @@ Note "version $Version  ->  tag $tag"
 
 if (-not $NoPublish) {
     if (-not (Get-Command gh -ErrorAction SilentlyContinue)) { throw "the GitHub CLI (gh) is not on PATH" }
-    gh auth status 2>&1 | Out-Null
-    if ($LASTEXITCODE -ne 0) { throw "gh is not logged in. Run: gh auth login" }
+    if (-not (Test-Native { gh auth status })) { throw "gh is not logged in. Run: gh auth login" }
 
-    $existing = gh release view $tag --json tagName 2>$null
-    if ($existing -and -not $Force) {
+    if ((Test-Native { gh release view $tag --json tagName }) -and -not $Force) {
         throw "$tag is already released. Bump with -Version, or pass -Force to replace it."
     }
 }
@@ -127,8 +142,12 @@ if (-not $NoPublish) {
 
     $notesPath = "$repo\docs\release-notes\$tag.md"
     if (-not (Test-Path $notesPath)) {
-        # Fall back to the commit subjects since the previous tag.
-        $prev = git describe --tags --abbrev=0 "$tag^" 2>$null
+        # Fall back to the commit subjects since the previous tag. There is no
+        # previous tag on a first release, and that is not an error.
+        $prev = $null
+        if (Test-Native { git describe --tags --abbrev=0 HEAD }) {
+            $prev = (git describe --tags --abbrev=0 HEAD).Trim()
+        }
         $range = if ($prev) { "$prev..HEAD" } else { "HEAD" }
         $log = git log $range --format="- %s" --no-merges
         $notesPath = Join-Path $env:TEMP "scrim-notes-$Version.md"
@@ -154,9 +173,14 @@ Licensed AGPL-3.0-or-later. Bundled components are listed in THIRD-PARTY.md.
     }
 
     git push -q origin HEAD
-    if (git tag -l $tag) {
-        if ($Force) { git tag -d $tag | Out-Null; git push -q --delete origin $tag 2>$null }
+
+    if ($Force) {
+        # Clear anything already occupying the tag, locally and on the remote.
+        Test-Native { gh release delete $tag --yes } | Out-Null
+        Test-Native { git push --delete origin $tag } | Out-Null
+        Test-Native { git tag -d $tag } | Out-Null
     }
+
     git tag -a $tag -m "Scrim $Version"
     git push -q origin $tag
     Ok "tagged and pushed $tag"
@@ -166,7 +190,6 @@ Licensed AGPL-3.0-or-later. Bundled components are listed in THIRD-PARTY.md.
 
     $releaseArgs = @("release", "create", $tag, "--title", "Scrim $Version", "--notes-file", $notesPath)
     if ($Draft) { $releaseArgs += "--draft" }
-    if ($Force) { gh release delete $tag --yes --cleanup-tag 2>$null | Out-Null; git push -q origin $tag }
     $releaseArgs += $assets
 
     & gh @releaseArgs
