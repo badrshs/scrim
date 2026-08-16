@@ -1,0 +1,16 @@
+[package]
+name = "scrim-detect"
+description = "Nudity detection: ffmpeg frame pipe into the NudeNet ONNX model."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+scrim-core = { path = "../scrim-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+ort = { version = "=2.0.0-rc.13", default-features = false, features = ["load-dynamic", "ndarray"] }
+ndarray = "0.16"

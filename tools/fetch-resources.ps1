@@ -38,7 +38,9 @@ New-Item -ItemType Directory -Force -Path $resources, $work | Out-Null
 # Pinned versions. Bump deliberately, then re-run with -UpdateLock.
 $MPV_TAG = "20260814"
 $MPV_BUILD = "mpv-x86_64-20260814-git-7b8915bc1d"
-$ONNX_VERSION = "1.20.1"
+# Must match the ONNX Runtime the `ort` crate wraps, because Scrim loads the
+# DLL dynamically rather than linking it. ort 2.0.0-rc.13 targets 1.28.
+$ONNX_VERSION = "1.28.0"
 $NUDENET_TAG = "v3.4-weights"
 
 $sources = @(

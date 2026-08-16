@@ -1,0 +1,5465 @@
+{
+ "source": "abc.mp4",
+ "start": 2265.0,
+ "duration": 65.0,
+ "sample_fps": 3,
+ "detect_width": 1280,
+ "detect_height": 720,
+ "frames": [
+  {
+   "index": 0,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.843895,
+     "box": [
+      198,
+      149,
+      205,
+      188
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.660119,
+     "box": [
+      97,
+      517,
+      196,
+      177
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.531695,
+     "box": [
+      304,
+      529,
+      221,
+      167
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.280875,
+     "box": [
+      679,
+      166,
+      72,
+      71
+     ]
+    }
+   ]
+  },
+  {
+   "index": 1,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.863355,
+     "box": [
+      191,
+      160,
+      200,
+      181
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.673051,
+     "box": [
+      93,
+      515,
+      197,
+      175
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.563911,
+     "box": [
+      304,
+      527,
+      214,
+      165
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.442152,
+     "box": [
+      735,
+      161,
+      75,
+      72
+     ]
+    }
+   ]
+  },
+  {
+   "index": 2,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.839956,
+     "box": [
+      172,
+      164,
+      199,
+      180
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.639321,
+     "box": [
+      75,
+      510,
+      200,
+      178
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.559784,
+     "box": [
+      281,
+      518,
+      220,
+      175
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.485542,
+     "box": [
+      739,
+      165,
+      77,
+      76
+     ]
+    }
+   ]
+  },
+  {
+   "index": 3,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.833789,
+     "box": [
+      149,
+      163,
+      208,
+      182
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.688794,
+     "box": [
+      53,
+      513,
+      207,
+      179
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.48933,
+     "box": [
+      268,
+      521,
+      217,
+      177
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.456843,
+     "box": [
+      806,
+      175,
+      88,
+      82
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.293836,
+     "box": [
+      1021,
+      141,
+      87,
+      80
+     ]
+    }
+   ]
+  },
+  {
+   "index": 4,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.860262,
+     "box": [
+      154,
+      161,
+      201,
+      182
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.694812,
+     "box": [
+      58,
+      513,
+      205,
+      179
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.50367,
+     "box": [
+      276,
+      537,
+      206,
+      164
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.480831,
+     "box": [
+      854,
+      105,
+      92,
+      90
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.391787,
+     "box": [
+      1031,
+      144,
+      87,
+      86
+     ]
+    }
+   ]
+  },
+  {
+   "index": 5,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.849592,
+     "box": [
+      164,
+      167,
+      205,
+      179
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.651501,
+     "box": [
+      78,
+      517,
+      200,
+      175
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.60877,
+     "box": [
+      283,
+      525,
+      218,
+      172
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.563583,
+     "box": [
+      866,
+      89,
+      90,
+      87
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.328268,
+     "box": [
+      1030,
+      141,
+      88,
+      88
+     ]
+    }
+   ]
+  },
+  {
+   "index": 6,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.849082,
+     "box": [
+      185,
+      168,
+      203,
+      177
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.680802,
+     "box": [
+      94,
+      520,
+      197,
+      175
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.567345,
+     "box": [
+      305,
+      522,
+      216,
+      170
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.356982,
+     "box": [
+      1031,
+      142,
+      89,
+      90
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.325509,
+     "box": [
+      884,
+      94,
+      97,
+      99
+     ]
+    }
+   ]
+  },
+  {
+   "index": 7,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.851993,
+     "box": [
+      209,
+      166,
+      199,
+      180
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.600862,
+     "box": [
+      109,
+      511,
+      203,
+      181
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.490073,
+     "box": [
+      327,
+      525,
+      208,
+      174
+     ]
+    }
+   ]
+  },
+  {
+   "index": 8,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.863336,
+     "box": [
+      223,
+      164,
+      196,
+      179
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.708343,
+     "box": [
+      345,
+      539,
+      198,
+      155
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.529199,
+     "box": [
+      123,
+      507,
+      204,
+      175
+     ]
+    }
+   ]
+  },
+  {
+   "index": 9,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.861475,
+     "box": [
+      229,
+      158,
+      199,
+      184
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.707699,
+     "box": [
+      344,
+      541,
+      200,
+      157
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.429168,
+     "box": [
+      129,
+      502,
+      192,
+      184
+     ]
+    }
+   ]
+  },
+  {
+   "index": 10,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.876881,
+     "box": [
+      224,
+      163,
+      193,
+      179
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.607459,
+     "box": [
+      122,
+      504,
+      197,
+      181
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.550948,
+     "box": [
+      342,
+      535,
+      196,
+      159
+     ]
+    }
+   ]
+  },
+  {
+   "index": 11,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.603942,
+     "box": [
+      103,
+      390,
+      302,
+      185
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.352656,
+     "box": [
+      874,
+      197,
+      132,
+      108
+     ]
+    }
+   ]
+  },
+  {
+   "index": 12,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.635941,
+     "box": [
+      102,
+      389,
+      298,
+      182
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.467427,
+     "box": [
+      871,
+      199,
+      121,
+      103
+     ]
+    }
+   ]
+  },
+  {
+   "index": 13,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.652319,
+     "box": [
+      104,
+      392,
+      301,
+      183
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.390948,
+     "box": [
+      871,
+      196,
+      127,
+      110
+     ]
+    }
+   ]
+  },
+  {
+   "index": 14,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.702931,
+     "box": [
+      107,
+      391,
+      294,
+      184
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.434339,
+     "box": [
+      871,
+      196,
+      126,
+      104
+     ]
+    }
+   ]
+  },
+  {
+   "index": 15,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.626969,
+     "box": [
+      105,
+      384,
+      290,
+      186
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.375487,
+     "box": [
+      873,
+      193,
+      123,
+      110
+     ]
+    }
+   ]
+  },
+  {
+   "index": 16,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.575283,
+     "box": [
+      105,
+      387,
+      289,
+      178
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.393331,
+     "box": [
+      869,
+      179,
+      115,
+      96
+     ]
+    }
+   ]
+  },
+  {
+   "index": 17,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.616703,
+     "box": [
+      105,
+      381,
+      290,
+      188
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.365059,
+     "box": [
+      873,
+      190,
+      120,
+      102
+     ]
+    }
+   ]
+  },
+  {
+   "index": 18,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.598499,
+     "box": [
+      102,
+      380,
+      294,
+      190
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.372812,
+     "box": [
+      873,
+      187,
+      113,
+      94
+     ]
+    }
+   ]
+  },
+  {
+   "index": 19,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.53205,
+     "box": [
+      98,
+      380,
+      294,
+      185
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.382493,
+     "box": [
+      863,
+      178,
+      125,
+      96
+     ]
+    }
+   ]
+  },
+  {
+   "index": 20,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.726564,
+     "box": [
+      92,
+      382,
+      297,
+      187
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.420335,
+     "box": [
+      875,
+      190,
+      119,
+      98
+     ]
+    }
+   ]
+  },
+  {
+   "index": 21,
+   "detections": [
+    {
+     "class": "BUTTOCKS_COVERED",
+     "score": 0.512179,
+     "box": [
+      91,
+      381,
+      296,
+      182
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.453743,
+     "box": [
+      872,
+      189,
+      117,
+      96
+     ]
+    }
+   ]
+  },
+  {
+   "index": 22,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.790344,
+     "box": [
+      310,
+      110,
+      165,
+      170
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.540291,
+     "box": [
+      873,
+      189,
+      115,
+      96
+     ]
+    }
+   ]
+  },
+  {
+   "index": 23,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.800332,
+     "box": [
+      310,
+      114,
+      161,
+      166
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.292049,
+     "box": [
+      887,
+      187,
+      114,
+      95
+     ]
+    }
+   ]
+  },
+  {
+   "index": 24,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.807066,
+     "box": [
+      306,
+      113,
+      161,
+      163
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.366116,
+     "box": [
+      894,
+      185,
+      114,
+      97
+     ]
+    }
+   ]
+  },
+  {
+   "index": 25,
+   "detections": []
+  },
+  {
+   "index": 26,
+   "detections": []
+  },
+  {
+   "index": 27,
+   "detections": []
+  },
+  {
+   "index": 28,
+   "detections": []
+  },
+  {
+   "index": 29,
+   "detections": []
+  },
+  {
+   "index": 30,
+   "detections": []
+  },
+  {
+   "index": 31,
+   "detections": []
+  },
+  {
+   "index": 32,
+   "detections": []
+  },
+  {
+   "index": 33,
+   "detections": []
+  },
+  {
+   "index": 34,
+   "detections": []
+  },
+  {
+   "index": 35,
+   "detections": []
+  },
+  {
+   "index": 36,
+   "detections": []
+  },
+  {
+   "index": 37,
+   "detections": []
+  },
+  {
+   "index": 38,
+   "detections": []
+  },
+  {
+   "index": 39,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.791692,
+     "box": [
+      961,
+      296,
+      98,
+      87
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.637192,
+     "box": [
+      937,
+      519,
+      142,
+      111
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.595706,
+     "box": [
+      741,
+      103,
+      112,
+      109
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.478704,
+     "box": [
+      1006,
+      429,
+      95,
+      92
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.411055,
+     "box": [
+      899,
+      424,
+      101,
+      100
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.389753,
+     "box": [
+      496,
+      87,
+      113,
+      110
+     ]
+    }
+   ]
+  },
+  {
+   "index": 40,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.786789,
+     "box": [
+      962,
+      296,
+      98,
+      86
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.635852,
+     "box": [
+      741,
+      104,
+      111,
+      110
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.56244,
+     "box": [
+      933,
+      518,
+      142,
+      109
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.504273,
+     "box": [
+      1008,
+      430,
+      94,
+      91
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.365365,
+     "box": [
+      899,
+      423,
+      101,
+      100
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.356644,
+     "box": [
+      491,
+      84,
+      118,
+      115
+     ]
+    }
+   ]
+  },
+  {
+   "index": 41,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.788892,
+     "box": [
+      964,
+      296,
+      98,
+      87
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.601613,
+     "box": [
+      740,
+      104,
+      112,
+      111
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.561811,
+     "box": [
+      1012,
+      437,
+      90,
+      85
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.52266,
+     "box": [
+      934,
+      521,
+      142,
+      107
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.338905,
+     "box": [
+      900,
+      424,
+      101,
+      102
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.331714,
+     "box": [
+      494,
+      84,
+      120,
+      127
+     ]
+    }
+   ]
+  },
+  {
+   "index": 42,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.774333,
+     "box": [
+      964,
+      295,
+      98,
+      87
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.609682,
+     "box": [
+      740,
+      103,
+      112,
+      110
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.571618,
+     "box": [
+      1010,
+      440,
+      90,
+      84
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.52856,
+     "box": [
+      934,
+      526,
+      142,
+      103
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.379753,
+     "box": [
+      494,
+      85,
+      117,
+      120
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.324062,
+     "box": [
+      902,
+      428,
+      100,
+      96
+     ]
+    }
+   ]
+  },
+  {
+   "index": 43,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.76547,
+     "box": [
+      964,
+      294,
+      98,
+      88
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.572411,
+     "box": [
+      737,
+      105,
+      113,
+      111
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.537672,
+     "box": [
+      935,
+      524,
+      141,
+      104
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.537494,
+     "box": [
+      1010,
+      440,
+      89,
+      83
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.405032,
+     "box": [
+      492,
+      83,
+      119,
+      119
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.292459,
+     "box": [
+      903,
+      428,
+      97,
+      95
+     ]
+    }
+   ]
+  },
+  {
+   "index": 44,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.769693,
+     "box": [
+      966,
+      295,
+      97,
+      87
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.622988,
+     "box": [
+      738,
+      107,
+      113,
+      108
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.585615,
+     "box": [
+      936,
+      523,
+      140,
+      104
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.506327,
+     "box": [
+      1011,
+      440,
+      88,
+      83
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.340453,
+     "box": [
+      496,
+      83,
+      113,
+      116
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.319909,
+     "box": [
+      901,
+      425,
+      99,
+      100
+     ]
+    }
+   ]
+  },
+  {
+   "index": 45,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.777231,
+     "box": [
+      966,
+      295,
+      98,
+      88
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.622889,
+     "box": [
+      738,
+      108,
+      113,
+      106
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.617819,
+     "box": [
+      934,
+      525,
+      140,
+      103
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.529094,
+     "box": [
+      1009,
+      437,
+      91,
+      87
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.38675,
+     "box": [
+      900,
+      426,
+      98,
+      97
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.2941,
+     "box": [
+      500,
+      76,
+      111,
+      115
+     ]
+    }
+   ]
+  },
+  {
+   "index": 46,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.781346,
+     "box": [
+      966,
+      296,
+      97,
+      87
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.63316,
+     "box": [
+      935,
+      523,
+      140,
+      104
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.588373,
+     "box": [
+      1009,
+      437,
+      91,
+      87
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.586758,
+     "box": [
+      737,
+      105,
+      113,
+      111
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.344075,
+     "box": [
+      901,
+      426,
+      97,
+      96
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.287905,
+     "box": [
+      502,
+      80,
+      113,
+      128
+     ]
+    }
+   ]
+  },
+  {
+   "index": 47,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.77601,
+     "box": [
+      964,
+      296,
+      98,
+      87
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.569538,
+     "box": [
+      738,
+      103,
+      113,
+      113
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.560882,
+     "box": [
+      935,
+      523,
+      140,
+      105
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.432805,
+     "box": [
+      1009,
+      445,
+      91,
+      79
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.316719,
+     "box": [
+      902,
+      427,
+      94,
+      96
+     ]
+    }
+   ]
+  },
+  {
+   "index": 48,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.770231,
+     "box": [
+      962,
+      295,
+      99,
+      88
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.555834,
+     "box": [
+      739,
+      103,
+      114,
+      110
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.466497,
+     "box": [
+      1009,
+      443,
+      91,
+      81
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.464936,
+     "box": [
+      937,
+      521,
+      142,
+      108
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.368045,
+     "box": [
+      497,
+      81,
+      119,
+      130
+     ]
+    }
+   ]
+  },
+  {
+   "index": 49,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.764409,
+     "box": [
+      960,
+      290,
+      101,
+      92
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.586099,
+     "box": [
+      739,
+      101,
+      114,
+      108
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.475311,
+     "box": [
+      932,
+      533,
+      143,
+      100
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.439624,
+     "box": [
+      500,
+      79,
+      120,
+      129
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.438728,
+     "box": [
+      1010,
+      447,
+      92,
+      77
+     ]
+    }
+   ]
+  },
+  {
+   "index": 50,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.772192,
+     "box": [
+      958,
+      287,
+      103,
+      93
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.597662,
+     "box": [
+      738,
+      102,
+      114,
+      107
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.518519,
+     "box": [
+      941,
+      526,
+      140,
+      106
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.447766,
+     "box": [
+      1012,
+      444,
+      89,
+      81
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.447644,
+     "box": [
+      503,
+      84,
+      120,
+      128
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.254908,
+     "box": [
+      902,
+      429,
+      93,
+      94
+     ]
+    }
+   ]
+  },
+  {
+   "index": 51,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.77422,
+     "box": [
+      959,
+      287,
+      101,
+      91
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.596701,
+     "box": [
+      738,
+      102,
+      115,
+      108
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.464031,
+     "box": [
+      935,
+      524,
+      141,
+      103
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.358109,
+     "box": [
+      500,
+      91,
+      121,
+      125
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.34795,
+     "box": [
+      1012,
+      444,
+      88,
+      79
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.308012,
+     "box": [
+      902,
+      427,
+      94,
+      95
+     ]
+    }
+   ]
+  },
+  {
+   "index": 52,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.76275,
+     "box": [
+      959,
+      287,
+      101,
+      91
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.605723,
+     "box": [
+      741,
+      102,
+      111,
+      103
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.539656,
+     "box": [
+      941,
+      521,
+      141,
+      110
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.447501,
+     "box": [
+      1013,
+      442,
+      88,
+      80
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.316852,
+     "box": [
+      901,
+      427,
+      96,
+      94
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.287215,
+     "box": [
+      488,
+      101,
+      120,
+      114
+     ]
+    }
+   ]
+  },
+  {
+   "index": 53,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.73868,
+     "box": [
+      960,
+      288,
+      101,
+      90
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.639077,
+     "box": [
+      740,
+      105,
+      111,
+      104
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.567824,
+     "box": [
+      940,
+      521,
+      141,
+      107
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.538504,
+     "box": [
+      1016,
+      433,
+      92,
+      88
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.408988,
+     "box": [
+      486,
+      101,
+      118,
+      116
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.321302,
+     "box": [
+      903,
+      426,
+      100,
+      96
+     ]
+    }
+   ]
+  },
+  {
+   "index": 54,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.756069,
+     "box": [
+      961,
+      288,
+      100,
+      90
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.643608,
+     "box": [
+      743,
+      104,
+      108,
+      103
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.538225,
+     "box": [
+      940,
+      523,
+      139,
+      105
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.460719,
+     "box": [
+      1018,
+      441,
+      86,
+      81
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.327578,
+     "box": [
+      491,
+      90,
+      111,
+      108
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.284274,
+     "box": [
+      903,
+      429,
+      97,
+      95
+     ]
+    }
+   ]
+  },
+  {
+   "index": 55,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.754061,
+     "box": [
+      960,
+      287,
+      100,
+      91
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.620513,
+     "box": [
+      740,
+      105,
+      110,
+      105
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.580901,
+     "box": [
+      940,
+      526,
+      140,
+      102
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.525147,
+     "box": [
+      1016,
+      435,
+      92,
+      87
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.402039,
+     "box": [
+      503,
+      85,
+      106,
+      112
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.312988,
+     "box": [
+      903,
+      431,
+      97,
+      95
+     ]
+    }
+   ]
+  },
+  {
+   "index": 56,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.7503,
+     "box": [
+      959,
+      288,
+      101,
+      92
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.602648,
+     "box": [
+      739,
+      106,
+      110,
+      104
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.556599,
+     "box": [
+      937,
+      537,
+      140,
+      96
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.43931,
+     "box": [
+      506,
+      80,
+      116,
+      128
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.389383,
+     "box": [
+      1016,
+      446,
+      87,
+      80
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.285319,
+     "box": [
+      903,
+      436,
+      98,
+      94
+     ]
+    }
+   ]
+  },
+  {
+   "index": 57,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.757935,
+     "box": [
+      958,
+      287,
+      102,
+      93
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.615333,
+     "box": [
+      740,
+      105,
+      110,
+      104
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.566565,
+     "box": [
+      939,
+      528,
+      141,
+      104
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.438629,
+     "box": [
+      1011,
+      445,
+      90,
+      81
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.422598,
+     "box": [
+      508,
+      82,
+      117,
+      125
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.301589,
+     "box": [
+      901,
+      432,
+      96,
+      96
+     ]
+    }
+   ]
+  },
+  {
+   "index": 58,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.768504,
+     "box": [
+      957,
+      287,
+      102,
+      92
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.637934,
+     "box": [
+      741,
+      105,
+      109,
+      102
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.517677,
+     "box": [
+      936,
+      526,
+      143,
+      104
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.45963,
+     "box": [
+      511,
+      84,
+      116,
+      121
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.453305,
+     "box": [
+      1007,
+      445,
+      93,
+      81
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.324738,
+     "box": [
+      899,
+      425,
+      98,
+      99
+     ]
+    }
+   ]
+  },
+  {
+   "index": 59,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.744605,
+     "box": [
+      958,
+      288,
+      100,
+      90
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.623484,
+     "box": [
+      739,
+      105,
+      111,
+      105
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.579062,
+     "box": [
+      938,
+      527,
+      142,
+      104
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.464235,
+     "box": [
+      1006,
+      444,
+      93,
+      81
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.417658,
+     "box": [
+      508,
+      88,
+      116,
+      119
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.304573,
+     "box": [
+      899,
+      424,
+      98,
+      101
+     ]
+    }
+   ]
+  },
+  {
+   "index": 60,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.753823,
+     "box": [
+      955,
+      289,
+      99,
+      88
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.641788,
+     "box": [
+      743,
+      104,
+      108,
+      102
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.549967,
+     "box": [
+      934,
+      524,
+      143,
+      105
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.497399,
+     "box": [
+      1006,
+      440,
+      94,
+      85
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.332659,
+     "box": [
+      506,
+      79,
+      112,
+      120
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.265718,
+     "box": [
+      901,
+      425,
+      95,
+      97
+     ]
+    }
+   ]
+  },
+  {
+   "index": 61,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.755521,
+     "box": [
+      955,
+      290,
+      99,
+      90
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.643019,
+     "box": [
+      743,
+      104,
+      107,
+      102
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.592612,
+     "box": [
+      932,
+      529,
+      141,
+      100
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.506718,
+     "box": [
+      500,
+      77,
+      114,
+      119
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.505619,
+     "box": [
+      1002,
+      435,
+      96,
+      90
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.358307,
+     "box": [
+      898,
+      433,
+      95,
+      91
+     ]
+    }
+   ]
+  },
+  {
+   "index": 62,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.746168,
+     "box": [
+      954,
+      290,
+      101,
+      92
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.630753,
+     "box": [
+      745,
+      103,
+      106,
+      102
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.587532,
+     "box": [
+      931,
+      533,
+      143,
+      97
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.465171,
+     "box": [
+      1000,
+      437,
+      97,
+      89
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.369553,
+     "box": [
+      504,
+      77,
+      112,
+      120
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.296512,
+     "box": [
+      897,
+      433,
+      97,
+      96
+     ]
+    }
+   ]
+  },
+  {
+   "index": 63,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.73561,
+     "box": [
+      951,
+      293,
+      101,
+      90
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.605691,
+     "box": [
+      744,
+      104,
+      107,
+      101
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.552262,
+     "box": [
+      1003,
+      436,
+      99,
+      89
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.523772,
+     "box": [
+      933,
+      530,
+      142,
+      101
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.369978,
+     "box": [
+      503,
+      83,
+      119,
+      124
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.369286,
+     "box": [
+      895,
+      436,
+      95,
+      91
+     ]
+    }
+   ]
+  },
+  {
+   "index": 64,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.734565,
+     "box": [
+      952,
+      292,
+      101,
+      90
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.611409,
+     "box": [
+      743,
+      104,
+      108,
+      102
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.457649,
+     "box": [
+      1001,
+      438,
+      97,
+      87
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.457135,
+     "box": [
+      934,
+      529,
+      141,
+      103
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.311837,
+     "box": [
+      895,
+      436,
+      94,
+      91
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.264579,
+     "box": [
+      501,
+      77,
+      112,
+      118
+     ]
+    }
+   ]
+  },
+  {
+   "index": 65,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.738547,
+     "box": [
+      952,
+      293,
+      100,
+      90
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.599259,
+     "box": [
+      741,
+      108,
+      108,
+      102
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.561084,
+     "box": [
+      931,
+      533,
+      141,
+      99
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.533906,
+     "box": [
+      1004,
+      436,
+      97,
+      85
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.360335,
+     "box": [
+      896,
+      437,
+      94,
+      91
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.302789,
+     "box": [
+      498,
+      92,
+      113,
+      113
+     ]
+    }
+   ]
+  },
+  {
+   "index": 66,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.761724,
+     "box": [
+      953,
+      290,
+      101,
+      92
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.588646,
+     "box": [
+      740,
+      107,
+      109,
+      102
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.553946,
+     "box": [
+      932,
+      533,
+      144,
+      100
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.479383,
+     "box": [
+      1002,
+      438,
+      95,
+      86
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.34992,
+     "box": [
+      897,
+      435,
+      95,
+      91
+     ]
+    }
+   ]
+  },
+  {
+   "index": 67,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.764474,
+     "box": [
+      955,
+      290,
+      101,
+      91
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.644659,
+     "box": [
+      741,
+      105,
+      108,
+      103
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.59361,
+     "box": [
+      932,
+      530,
+      144,
+      101
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.495013,
+     "box": [
+      1002,
+      442,
+      94,
+      83
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.320567,
+     "box": [
+      897,
+      434,
+      98,
+      96
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.250682,
+     "box": [
+      505,
+      75,
+      113,
+      120
+     ]
+    }
+   ]
+  },
+  {
+   "index": 68,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.770052,
+     "box": [
+      956,
+      289,
+      101,
+      91
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.644905,
+     "box": [
+      939,
+      530,
+      142,
+      102
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.622185,
+     "box": [
+      741,
+      106,
+      107,
+      103
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.451617,
+     "box": [
+      1002,
+      442,
+      96,
+      84
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.337953,
+     "box": [
+      900,
+      437,
+      94,
+      93
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.269847,
+     "box": [
+      509,
+      74,
+      110,
+      123
+     ]
+    }
+   ]
+  },
+  {
+   "index": 69,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.749131,
+     "box": [
+      956,
+      290,
+      100,
+      89
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.60175,
+     "box": [
+      741,
+      104,
+      109,
+      102
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.523229,
+     "box": [
+      940,
+      528,
+      142,
+      104
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.34207,
+     "box": [
+      1009,
+      452,
+      93,
+      75
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.273829,
+     "box": [
+      900,
+      432,
+      98,
+      96
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.262287,
+     "box": [
+      505,
+      84,
+      118,
+      131
+     ]
+    }
+   ]
+  },
+  {
+   "index": 70,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.740982,
+     "box": [
+      960,
+      290,
+      100,
+      89
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.60309,
+     "box": [
+      947,
+      522,
+      138,
+      108
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.578793,
+     "box": [
+      741,
+      104,
+      109,
+      101
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.444607,
+     "box": [
+      1022,
+      447,
+      83,
+      78
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.360095,
+     "box": [
+      905,
+      433,
+      98,
+      97
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.331449,
+     "box": [
+      499,
+      78,
+      116,
+      123
+     ]
+    }
+   ]
+  },
+  {
+   "index": 71,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.755305,
+     "box": [
+      961,
+      289,
+      101,
+      90
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.604372,
+     "box": [
+      740,
+      104,
+      109,
+      103
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.56998,
+     "box": [
+      944,
+      522,
+      138,
+      105
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.53676,
+     "box": [
+      1017,
+      439,
+      93,
+      89
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.368221,
+     "box": [
+      904,
+      429,
+      100,
+      100
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.293244,
+     "box": [
+      503,
+      96,
+      115,
+      112
+     ]
+    }
+   ]
+  },
+  {
+   "index": 72,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.744134,
+     "box": [
+      964,
+      289,
+      99,
+      88
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.664098,
+     "box": [
+      944,
+      521,
+      138,
+      107
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.60081,
+     "box": [
+      1018,
+      433,
+      94,
+      91
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.566597,
+     "box": [
+      741,
+      105,
+      108,
+      102
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.521806,
+     "box": [
+      904,
+      429,
+      99,
+      98
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.414094,
+     "box": [
+      504,
+      101,
+      113,
+      109
+     ]
+    }
+   ]
+  },
+  {
+   "index": 73,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.749204,
+     "box": [
+      965,
+      290,
+      98,
+      88
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.660403,
+     "box": [
+      944,
+      522,
+      138,
+      107
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.509347,
+     "box": [
+      741,
+      105,
+      109,
+      102
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.488999,
+     "box": [
+      1017,
+      438,
+      90,
+      86
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.474087,
+     "box": [
+      906,
+      433,
+      97,
+      97
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.435986,
+     "box": [
+      497,
+      99,
+      120,
+      124
+     ]
+    }
+   ]
+  },
+  {
+   "index": 74,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.761417,
+     "box": [
+      966,
+      292,
+      98,
+      87
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.645831,
+     "box": [
+      946,
+      524,
+      136,
+      106
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.513414,
+     "box": [
+      741,
+      106,
+      107,
+      100
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.445264,
+     "box": [
+      1019,
+      438,
+      89,
+      86
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.419562,
+     "box": [
+      501,
+      104,
+      114,
+      134
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.383433,
+     "box": [
+      907,
+      441,
+      95,
+      91
+     ]
+    }
+   ]
+  },
+  {
+   "index": 75,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.768595,
+     "box": [
+      968,
+      291,
+      98,
+      89
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.639074,
+     "box": [
+      947,
+      521,
+      136,
+      109
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.523082,
+     "box": [
+      741,
+      102,
+      109,
+      105
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.520951,
+     "box": [
+      1023,
+      437,
+      91,
+      88
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.461503,
+     "box": [
+      909,
+      432,
+      95,
+      98
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.425607,
+     "box": [
+      500,
+      107,
+      115,
+      133
+     ]
+    }
+   ]
+  },
+  {
+   "index": 76,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.75667,
+     "box": [
+      969,
+      292,
+      99,
+      87
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.575376,
+     "box": [
+      946,
+      525,
+      136,
+      103
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.513284,
+     "box": [
+      681,
+      108,
+      114,
+      104
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.408909,
+     "box": [
+      1023,
+      442,
+      93,
+      85
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.352516,
+     "box": [
+      910,
+      439,
+      96,
+      92
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.310561,
+     "box": [
+      494,
+      103,
+      111,
+      104
+     ]
+    }
+   ]
+  },
+  {
+   "index": 77,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.749976,
+     "box": [
+      983,
+      297,
+      94,
+      87
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.707826,
+     "box": [
+      1032,
+      439,
+      98,
+      95
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.657219,
+     "box": [
+      956,
+      523,
+      134,
+      104
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.384054,
+     "box": [
+      927,
+      434,
+      101,
+      94
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.382062,
+     "box": [
+      589,
+      118,
+      113,
+      105
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.316632,
+     "box": [
+      500,
+      106,
+      114,
+      110
+     ]
+    }
+   ]
+  },
+  {
+   "index": 78,
+   "detections": []
+  },
+  {
+   "index": 79,
+   "detections": []
+  },
+  {
+   "index": 80,
+   "detections": []
+  },
+  {
+   "index": 81,
+   "detections": []
+  },
+  {
+   "index": 82,
+   "detections": []
+  },
+  {
+   "index": 83,
+   "detections": []
+  },
+  {
+   "index": 84,
+   "detections": []
+  },
+  {
+   "index": 85,
+   "detections": []
+  },
+  {
+   "index": 86,
+   "detections": []
+  },
+  {
+   "index": 87,
+   "detections": []
+  },
+  {
+   "index": 88,
+   "detections": []
+  },
+  {
+   "index": 89,
+   "detections": []
+  },
+  {
+   "index": 90,
+   "detections": []
+  },
+  {
+   "index": 91,
+   "detections": []
+  },
+  {
+   "index": 92,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.282411,
+     "box": [
+      677,
+      320,
+      54,
+      50
+     ]
+    }
+   ]
+  },
+  {
+   "index": 93,
+   "detections": []
+  },
+  {
+   "index": 94,
+   "detections": []
+  },
+  {
+   "index": 95,
+   "detections": []
+  },
+  {
+   "index": 96,
+   "detections": []
+  },
+  {
+   "index": 97,
+   "detections": []
+  },
+  {
+   "index": 98,
+   "detections": []
+  },
+  {
+   "index": 99,
+   "detections": []
+  },
+  {
+   "index": 100,
+   "detections": []
+  },
+  {
+   "index": 101,
+   "detections": []
+  },
+  {
+   "index": 102,
+   "detections": []
+  },
+  {
+   "index": 103,
+   "detections": []
+  },
+  {
+   "index": 104,
+   "detections": []
+  },
+  {
+   "index": 105,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.275839,
+     "box": [
+      678,
+      289,
+      49,
+      47
+     ]
+    }
+   ]
+  },
+  {
+   "index": 106,
+   "detections": []
+  },
+  {
+   "index": 107,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.271951,
+     "box": [
+      669,
+      284,
+      51,
+      44
+     ]
+    }
+   ]
+  },
+  {
+   "index": 108,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.266532,
+     "box": [
+      848,
+      292,
+      45,
+      46
+     ]
+    }
+   ]
+  },
+  {
+   "index": 109,
+   "detections": []
+  },
+  {
+   "index": 110,
+   "detections": []
+  },
+  {
+   "index": 111,
+   "detections": []
+  },
+  {
+   "index": 112,
+   "detections": []
+  },
+  {
+   "index": 113,
+   "detections": []
+  },
+  {
+   "index": 114,
+   "detections": []
+  },
+  {
+   "index": 115,
+   "detections": []
+  },
+  {
+   "index": 116,
+   "detections": []
+  },
+  {
+   "index": 117,
+   "detections": []
+  },
+  {
+   "index": 118,
+   "detections": []
+  },
+  {
+   "index": 119,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.281735,
+     "box": [
+      869,
+      232,
+      53,
+      50
+     ]
+    }
+   ]
+  },
+  {
+   "index": 120,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.301933,
+     "box": [
+      682,
+      232,
+      57,
+      53
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.289231,
+     "box": [
+      882,
+      236,
+      59,
+      54
+     ]
+    }
+   ]
+  },
+  {
+   "index": 121,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.295757,
+     "box": [
+      889,
+      232,
+      62,
+      61
+     ]
+    }
+   ]
+  },
+  {
+   "index": 122,
+   "detections": []
+  },
+  {
+   "index": 123,
+   "detections": []
+  },
+  {
+   "index": 124,
+   "detections": []
+  },
+  {
+   "index": 125,
+   "detections": []
+  },
+  {
+   "index": 126,
+   "detections": []
+  },
+  {
+   "index": 127,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.303133,
+     "box": [
+      883,
+      208,
+      56,
+      55
+     ]
+    }
+   ]
+  },
+  {
+   "index": 128,
+   "detections": []
+  },
+  {
+   "index": 129,
+   "detections": []
+  },
+  {
+   "index": 130,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.2976,
+     "box": [
+      855,
+      171,
+      57,
+      58
+     ]
+    }
+   ]
+  },
+  {
+   "index": 131,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.316287,
+     "box": [
+      844,
+      186,
+      66,
+      61
+     ]
+    }
+   ]
+  },
+  {
+   "index": 132,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.404202,
+     "box": [
+      824,
+      160,
+      58,
+      57
+     ]
+    }
+   ]
+  },
+  {
+   "index": 133,
+   "detections": []
+  },
+  {
+   "index": 134,
+   "detections": []
+  },
+  {
+   "index": 135,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.366553,
+     "box": [
+      619,
+      142,
+      59,
+      57
+     ]
+    }
+   ]
+  },
+  {
+   "index": 136,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.272527,
+     "box": [
+      593,
+      123,
+      61,
+      59
+     ]
+    }
+   ]
+  },
+  {
+   "index": 137,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.427074,
+     "box": [
+      593,
+      126,
+      70,
+      60
+     ]
+    }
+   ]
+  },
+  {
+   "index": 138,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.543704,
+     "box": [
+      611,
+      128,
+      66,
+      62
+     ]
+    },
+    {
+     "class": "FEET_COVERED",
+     "score": 0.315656,
+     "box": [
+      560,
+      626,
+      64,
+      80
+     ]
+    }
+   ]
+  },
+  {
+   "index": 139,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.618305,
+     "box": [
+      604,
+      119,
+      72,
+      64
+     ]
+    }
+   ]
+  },
+  {
+   "index": 140,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.57896,
+     "box": [
+      572,
+      119,
+      74,
+      64
+     ]
+    }
+   ]
+  },
+  {
+   "index": 141,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.521272,
+     "box": [
+      568,
+      110,
+      73,
+      67
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.320102,
+     "box": [
+      809,
+      124,
+      75,
+      65
+     ]
+    }
+   ]
+  },
+  {
+   "index": 142,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.608211,
+     "box": [
+      569,
+      116,
+      77,
+      69
+     ]
+    },
+    {
+     "class": "ARMPITS_EXPOSED",
+     "score": 0.29302,
+     "box": [
+      536,
+      224,
+      39,
+      38
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.271068,
+     "box": [
+      819,
+      136,
+      76,
+      75
+     ]
+    }
+   ]
+  },
+  {
+   "index": 143,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.497052,
+     "box": [
+      585,
+      108,
+      72,
+      65
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.307555,
+     "box": [
+      845,
+      133,
+      67,
+      62
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.28247,
+     "box": [
+      596,
+      185,
+      80,
+      74
+     ]
+    }
+   ]
+  },
+  {
+   "index": 144,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.50893,
+     "box": [
+      564,
+      109,
+      79,
+      72
+     ]
+    },
+    {
+     "class": "ARMPITS_EXPOSED",
+     "score": 0.411037,
+     "box": [
+      510,
+      219,
+      43,
+      45
+     ]
+    }
+   ]
+  },
+  {
+   "index": 145,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.586523,
+     "box": [
+      534,
+      104,
+      79,
+      71
+     ]
+    }
+   ]
+  },
+  {
+   "index": 146,
+   "detections": [
+    {
+     "class": "FACE_MALE",
+     "score": 0.401007,
+     "box": [
+      851,
+      124,
+      84,
+      77
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.338418,
+     "box": [
+      526,
+      107,
+      84,
+      72
+     ]
+    }
+   ]
+  },
+  {
+   "index": 147,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.50682,
+     "box": [
+      541,
+      104,
+      80,
+      71
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.463417,
+     "box": [
+      888,
+      130,
+      89,
+      86
+     ]
+    }
+   ]
+  },
+  {
+   "index": 148,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.578733,
+     "box": [
+      534,
+      97,
+      79,
+      78
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.476595,
+     "box": [
+      906,
+      121,
+      87,
+      90
+     ]
+    }
+   ]
+  },
+  {
+   "index": 149,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.589228,
+     "box": [
+      494,
+      102,
+      87,
+      78
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.497463,
+     "box": [
+      892,
+      139,
+      96,
+      90
+     ]
+    },
+    {
+     "class": "BELLY_EXPOSED",
+     "score": 0.285749,
+     "box": [
+      637,
+      388,
+      102,
+      103
+     ]
+    }
+   ]
+  },
+  {
+   "index": 150,
+   "detections": [
+    {
+     "class": "FACE_MALE",
+     "score": 0.438066,
+     "box": [
+      891,
+      133,
+      98,
+      89
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.350907,
+     "box": [
+      487,
+      102,
+      79,
+      71
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.341549,
+     "box": [
+      651,
+      197,
+      73,
+      63
+     ]
+    }
+   ]
+  },
+  {
+   "index": 151,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.459895,
+     "box": [
+      506,
+      111,
+      80,
+      73
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.371542,
+     "box": [
+      919,
+      144,
+      100,
+      97
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.347419,
+     "box": [
+      449,
+      229,
+      89,
+      84
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.273114,
+     "box": [
+      649,
+      200,
+      73,
+      65
+     ]
+    }
+   ]
+  },
+  {
+   "index": 152,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.650737,
+     "box": [
+      503,
+      91,
+      82,
+      78
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.471071,
+     "box": [
+      928,
+      121,
+      100,
+      99
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.370186,
+     "box": [
+      447,
+      220,
+      94,
+      78
+     ]
+    }
+   ]
+  },
+  {
+   "index": 153,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.672003,
+     "box": [
+      475,
+      112,
+      86,
+      80
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.401314,
+     "box": [
+      633,
+      206,
+      78,
+      71
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.397397,
+     "box": [
+      895,
+      147,
+      98,
+      90
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.306404,
+     "box": [
+      413,
+      245,
+      90,
+      80
+     ]
+    }
+   ]
+  },
+  {
+   "index": 154,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.570197,
+     "box": [
+      446,
+      102,
+      93,
+      82
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.559609,
+     "box": [
+      861,
+      141,
+      102,
+      92
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.476085,
+     "box": [
+      387,
+      233,
+      91,
+      86
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.348181,
+     "box": [
+      646,
+      208,
+      76,
+      71
+     ]
+    }
+   ]
+  },
+  {
+   "index": 155,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.668199,
+     "box": [
+      444,
+      121,
+      96,
+      88
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.539397,
+     "box": [
+      866,
+      171,
+      104,
+      98
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.438668,
+     "box": [
+      652,
+      228,
+      80,
+      73
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.39901,
+     "box": [
+      382,
+      246,
+      98,
+      106
+     ]
+    }
+   ]
+  },
+  {
+   "index": 156,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.66778,
+     "box": [
+      439,
+      110,
+      104,
+      93
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.498215,
+     "box": [
+      651,
+      219,
+      84,
+      78
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.483155,
+     "box": [
+      888,
+      152,
+      103,
+      99
+     ]
+    }
+   ]
+  },
+  {
+   "index": 157,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.679309,
+     "box": [
+      420,
+      112,
+      99,
+      92
+     ]
+    },
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.570465,
+     "box": [
+      654,
+      227,
+      83,
+      79
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.508649,
+     "box": [
+      876,
+      167,
+      115,
+      118
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.333123,
+     "box": [
+      619,
+      363,
+      88,
+      85
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.254826,
+     "box": [
+      706,
+      357,
+      76,
+      77
+     ]
+    }
+   ]
+  },
+  {
+   "index": 158,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.729359,
+     "box": [
+      377,
+      114,
+      105,
+      93
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.477259,
+     "box": [
+      666,
+      230,
+      84,
+      76
+     ]
+    },
+    {
+     "class": "FACE_MALE",
+     "score": 0.354274,
+     "box": [
+      838,
+      147,
+      111,
+      93
+     ]
+    }
+   ]
+  },
+  {
+   "index": 159,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.822927,
+     "box": [
+      716,
+      86,
+      191,
+      189
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.621594,
+     "box": [
+      799,
+      500,
+      200,
+      159
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.465065,
+     "box": [
+      669,
+      501,
+      141,
+      153
+     ]
+    }
+   ]
+  },
+  {
+   "index": 160,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.820571,
+     "box": [
+      684,
+      113,
+      188,
+      179
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.670831,
+     "box": [
+      760,
+      505,
+      207,
+      165
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.409224,
+     "box": [
+      629,
+      503,
+      146,
+      159
+     ]
+    }
+   ]
+  },
+  {
+   "index": 161,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.798326,
+     "box": [
+      700,
+      106,
+      185,
+      181
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.664695,
+     "box": [
+      762,
+      495,
+      203,
+      168
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.330416,
+     "box": [
+      636,
+      488,
+      144,
+      163
+     ]
+    }
+   ]
+  },
+  {
+   "index": 162,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.800828,
+     "box": [
+      720,
+      122,
+      180,
+      177
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.651238,
+     "box": [
+      788,
+      530,
+      199,
+      148
+     ]
+    }
+   ]
+  },
+  {
+   "index": 163,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.7854,
+     "box": [
+      731,
+      107,
+      191,
+      184
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.678667,
+     "box": [
+      799,
+      505,
+      207,
+      164
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.504152,
+     "box": [
+      677,
+      511,
+      134,
+      153
+     ]
+    }
+   ]
+  },
+  {
+   "index": 164,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.810557,
+     "box": [
+      730,
+      83,
+      203,
+      194
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.626723,
+     "box": [
+      804,
+      499,
+      208,
+      163
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.459223,
+     "box": [
+      679,
+      499,
+      146,
+      167
+     ]
+    }
+   ]
+  },
+  {
+   "index": 165,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.813023,
+     "box": [
+      724,
+      79,
+      202,
+      198
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.647229,
+     "box": [
+      800,
+      486,
+      221,
+      184
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.439335,
+     "box": [
+      680,
+      502,
+      143,
+      166
+     ]
+    }
+   ]
+  },
+  {
+   "index": 166,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.812677,
+     "box": [
+      714,
+      84,
+      204,
+      195
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.64965,
+     "box": [
+      792,
+      494,
+      215,
+      175
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.369554,
+     "box": [
+      672,
+      510,
+      137,
+      157
+     ]
+    }
+   ]
+  },
+  {
+   "index": 167,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.809825,
+     "box": [
+      694,
+      88,
+      194,
+      194
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.696131,
+     "box": [
+      757,
+      508,
+      210,
+      170
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.459031,
+     "box": [
+      641,
+      509,
+      131,
+      155
+     ]
+    }
+   ]
+  },
+  {
+   "index": 168,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.799494,
+     "box": [
+      674,
+      99,
+      195,
+      189
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.687388,
+     "box": [
+      733,
+      516,
+      207,
+      166
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.299961,
+     "box": [
+      621,
+      515,
+      132,
+      161
+     ]
+    }
+   ]
+  },
+  {
+   "index": 169,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.789986,
+     "box": [
+      673,
+      107,
+      190,
+      188
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.717516,
+     "box": [
+      731,
+      518,
+      207,
+      169
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.313984,
+     "box": [
+      617,
+      529,
+      129,
+      157
+     ]
+    }
+   ]
+  },
+  {
+   "index": 170,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.444297,
+     "box": [
+      673,
+      117,
+      130,
+      111
+     ]
+    }
+   ]
+  },
+  {
+   "index": 171,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.551416,
+     "box": [
+      679,
+      109,
+      145,
+      129
+     ]
+    }
+   ]
+  },
+  {
+   "index": 172,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.664661,
+     "box": [
+      679,
+      110,
+      139,
+      118
+     ]
+    }
+   ]
+  },
+  {
+   "index": 173,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.756601,
+     "box": [
+      680,
+      102,
+      136,
+      117
+     ]
+    }
+   ]
+  },
+  {
+   "index": 174,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.7637,
+     "box": [
+      685,
+      104,
+      130,
+      110
+     ]
+    }
+   ]
+  },
+  {
+   "index": 175,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.718305,
+     "box": [
+      690,
+      94,
+      139,
+      126
+     ]
+    }
+   ]
+  },
+  {
+   "index": 176,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.728774,
+     "box": [
+      693,
+      104,
+      126,
+      115
+     ]
+    }
+   ]
+  },
+  {
+   "index": 177,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.803413,
+     "box": [
+      698,
+      118,
+      193,
+      192
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.680977,
+     "box": [
+      768,
+      530,
+      218,
+      170
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.422061,
+     "box": [
+      657,
+      555,
+      129,
+      149
+     ]
+    }
+   ]
+  },
+  {
+   "index": 178,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.802722,
+     "box": [
+      700,
+      122,
+      190,
+      194
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.694639,
+     "box": [
+      767,
+      532,
+      214,
+      168
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.324267,
+     "box": [
+      656,
+      535,
+      136,
+      166
+     ]
+    }
+   ]
+  },
+  {
+   "index": 179,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.812951,
+     "box": [
+      707,
+      123,
+      186,
+      187
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.682344,
+     "box": [
+      770,
+      538,
+      212,
+      163
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.345962,
+     "box": [
+      658,
+      551,
+      132,
+      151
+     ]
+    }
+   ]
+  },
+  {
+   "index": 180,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.823317,
+     "box": [
+      705,
+      120,
+      191,
+      193
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.67171,
+     "box": [
+      770,
+      528,
+      213,
+      169
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.471022,
+     "box": [
+      657,
+      540,
+      137,
+      163
+     ]
+    }
+   ]
+  },
+  {
+   "index": 181,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.809317,
+     "box": [
+      698,
+      121,
+      193,
+      192
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.714488,
+     "box": [
+      756,
+      523,
+      215,
+      173
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.399919,
+     "box": [
+      644,
+      536,
+      134,
+      162
+     ]
+    }
+   ]
+  },
+  {
+   "index": 182,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.811938,
+     "box": [
+      690,
+      128,
+      198,
+      190
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.668775,
+     "box": [
+      740,
+      538,
+      214,
+      161
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.390077,
+     "box": [
+      637,
+      553,
+      136,
+      153
+     ]
+    }
+   ]
+  },
+  {
+   "index": 183,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.814157,
+     "box": [
+      697,
+      141,
+      187,
+      186
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.667468,
+     "box": [
+      750,
+      545,
+      206,
+      156
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.364657,
+     "box": [
+      643,
+      550,
+      125,
+      150
+     ]
+    }
+   ]
+  },
+  {
+   "index": 184,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.82996,
+     "box": [
+      699,
+      139,
+      188,
+      192
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.632095,
+     "box": [
+      752,
+      530,
+      212,
+      168
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.34374,
+     "box": [
+      646,
+      542,
+      129,
+      156
+     ]
+    }
+   ]
+  },
+  {
+   "index": 185,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.823184,
+     "box": [
+      710,
+      137,
+      186,
+      193
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.694701,
+     "box": [
+      770,
+      541,
+      204,
+      156
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.413083,
+     "box": [
+      656,
+      551,
+      130,
+      154
+     ]
+    }
+   ]
+  },
+  {
+   "index": 186,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.811531,
+     "box": [
+      713,
+      135,
+      189,
+      193
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.632725,
+     "box": [
+      773,
+      544,
+      205,
+      153
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.326146,
+     "box": [
+      664,
+      545,
+      128,
+      155
+     ]
+    }
+   ]
+  },
+  {
+   "index": 187,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.832735,
+     "box": [
+      723,
+      136,
+      183,
+      187
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.624737,
+     "box": [
+      781,
+      547,
+      203,
+      151
+     ]
+    }
+   ]
+  },
+  {
+   "index": 188,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.825097,
+     "box": [
+      725,
+      137,
+      186,
+      186
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_EXPOSED",
+     "score": 0.609501,
+     "box": [
+      783,
+      547,
+      203,
+      151
+     ]
+    },
+    {
+     "class": "FEMALE_BREAST_COVERED",
+     "score": 0.30488,
+     "box": [
+      673,
+      538,
+      135,
+      160
+     ]
+    }
+   ]
+  },
+  {
+   "index": 189,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.76492,
+     "box": [
+      682,
+      104,
+      124,
+      116
+     ]
+    }
+   ]
+  },
+  {
+   "index": 190,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.746282,
+     "box": [
+      678,
+      105,
+      123,
+      116
+     ]
+    }
+   ]
+  },
+  {
+   "index": 191,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.760001,
+     "box": [
+      664,
+      106,
+      126,
+      117
+     ]
+    }
+   ]
+  },
+  {
+   "index": 192,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.684182,
+     "box": [
+      660,
+      110,
+      123,
+      115
+     ]
+    }
+   ]
+  },
+  {
+   "index": 193,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.761928,
+     "box": [
+      663,
+      103,
+      127,
+      118
+     ]
+    }
+   ]
+  },
+  {
+   "index": 194,
+   "detections": [
+    {
+     "class": "FACE_FEMALE",
+     "score": 0.760214,
+     "box": [
+      665,
+      106,
+      127,
+      116
+     ]
+    }
+   ]
+  }
+ ]
+}

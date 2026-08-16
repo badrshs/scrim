@@ -1,0 +1,15 @@
+[package]
+name = "scrim-cast"
+description = "Cast a censored stream to a Chromecast, with the cover burned into the pixels."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+mdns-sd = "0.21"
+rust_cast = "0.21"
+tiny_http = "0.12"

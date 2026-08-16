@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en" class="theme-dark">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Scrim</title>
+  <link rel="stylesheet" href="./styles/fonts.css">
   <link rel="stylesheet" href="./styles/tokens.css">
   <link rel="stylesheet" href="./styles/app.css">
 </head>
@@ -11,7 +12,7 @@
 
 <div class="app">
 
-  <!-- window chrome ------------------------------------------------------ -->
+  <!-- ================================================== window chrome === -->
   <div class="titlebar">
     <div class="titlebar__brand">
       <div class="mark" aria-hidden="true"></div>
@@ -19,47 +20,84 @@
     </div>
     <div class="titlebar__center">
       <span class="titlebar__file" id="now-playing">nothing playing</span>
-      <span class="badge badge--ok" id="plan-badge">PLAN OK &middot; 319 WINDOWS</span>
+      <span class="badge badge--idle hidden" id="plan-badge"></span>
     </div>
     <div class="titlebar__controls">
-      <button class="wincontrol" data-win="minimize" title="Minimise">&#x2500;</button>
-      <button class="wincontrol" data-win="maximize" title="Maximise">&#x25A1;</button>
-      <button class="wincontrol wincontrol--close" data-win="close" title="Close">&#x2715;</button>
+      <button class="wincontrol" data-win="minimize" title="Minimise" aria-label="Minimise">&#x2500;</button>
+      <button class="wincontrol" data-win="maximize" title="Maximise" aria-label="Maximise">&#x25A1;</button>
+      <button class="wincontrol wincontrol--close" data-win="close" title="Close" aria-label="Close">&#x2715;</button>
     </div>
   </div>
 
-  <!-- the stage ---------------------------------------------------------- -->
-  <!-- Everything inside .stage floats above mpv's child window. The
-       .stage__video element must never paint: it is the hole the picture
-       shows through, and its measured rectangle is what positions mpv. -->
+  <!-- ========================================================= stage ==== -->
+  <!-- Everything in here floats above mpv's window. .stage__video must never
+       paint: it is the hole the picture shows through. -->
   <div class="stage theme-dark is-idle" id="stage">
     <div class="stage__video" id="stage-video"></div>
 
     <div class="stage__empty" id="stage-empty">
       <div>
         <div class="stage__empty-mark" aria-hidden="true"></div>
-        <div>Open a movie to begin</div>
+        <div id="empty-title">Nothing playing</div>
+        <div class="mono" style="margin-top:8px;color:var(--text-6)" id="empty-hint">
+          Open the library to add a movie
+        </div>
       </div>
     </div>
 
-    <div class="status" id="status">
-      <span class="status__live" id="status-line1">READY</span>
-      <span id="status-line2">lead 5.0s &middot; hold 10.0s &middot; thr 0.55</span>
-      <span id="status-line3">compositing spike</span>
+    <!-- live scan banner -->
+    <div class="livebar hidden" id="livebar">
+      <span class="livebar__dot"></span>
+      <span class="livebar__label">Live detection</span>
+      <span class="livebar__stats" id="live-stats"></span>
+      <div class="livebar__track"><div class="livebar__fill" id="live-fill" style="width:0%"></div></div>
+      <span class="livebar__eta" id="live-eta"></span>
     </div>
 
+    <!-- engine readout -->
+    <div class="status hidden" id="status">
+      <span class="status__live" id="status-1"></span>
+      <span id="status-2"></span>
+      <span id="status-3"></span>
+    </div>
+
+    <!-- safety fence -->
+    <div class="fence hidden" id="fence">
+      <div class="fence__head">
+        <span class="fence__dot"></span>
+        <span class="fence__title" id="fence-title">Paused at the scan frontier</span>
+      </div>
+      <p class="fence__body" id="fence-body"></p>
+      <div class="fence__stats">
+        <span id="fence-pos"></span>
+        <span id="fence-frontier"></span>
+        <span class="fence__resume" id="fence-resume"></span>
+      </div>
+      <div class="fence__foot">
+        detection has not looked past this point yet &middot; fences lift when the scan completes
+      </div>
+    </div>
+
+    <div class="fs-hint hidden" id="fs-hint">
+      <span>FULLSCREEN</span><span class="fs-hint__key">Esc to exit</span>
+    </div>
+
+    <!-- ===================================================== controls === -->
     <div class="controls" id="controls">
-      <div class="seek" id="seek">
+      <div class="seek" id="seek" role="slider" aria-label="Seek" tabindex="0"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div class="seek__track"></div>
         <div class="seek__played" id="seek-played" style="width:0%"></div>
         <div id="seek-windows"></div>
+        <div class="seek__unscanned hidden" id="seek-unscanned" style="left:100%"></div>
+        <div class="seek__frontier hidden" id="seek-frontier" style="left:100%"></div>
         <div class="seek__handle" id="seek-handle" style="left:0%"></div>
       </div>
 
       <div class="controls__row">
         <div class="controls__group">
-          <button class="btn btn--transport" id="btn-play" title="Play or pause (Space)">&#9654;</button>
-          <button class="btn btn--transport" id="btn-stop" title="Stop">&#9632;</button>
+          <button class="btn btn--transport" id="btn-play" title="Play or pause (Space)" disabled>&#9654;</button>
+          <button class="btn btn--transport" id="btn-stop" title="Stop" disabled>&#9632;</button>
           <span class="time"><span id="time-now">00:00:00</span>
             <span class="time__total">/ <span id="time-total">--:--:--</span></span></span>
         </div>
@@ -67,32 +105,225 @@
         <div class="controls__group">
           <div class="volume">
             <span class="btn__key">VOL</span>
-            <div class="volume__track" id="volume-track">
-              <div class="volume__fill" style="width:68%"></div>
-              <div class="volume__handle" style="left:68%"></div>
+            <div class="volume__track" id="volume-track" role="slider" aria-label="Volume"
+                 tabindex="0" aria-valuemin="0" aria-valuemax="130" aria-valuenow="100">
+              <div class="volume__fill" id="volume-fill" style="width:77%"></div>
+              <div class="volume__handle" id="volume-handle" style="left:77%"></div>
             </div>
-            <span class="volume__value" id="volume-value">68</span>
+            <span class="volume__value" id="volume-value">100</span>
           </div>
 
-          <button class="btn" id="btn-censor">
-            <span class="btn__key">CENSOR</span>
-            <span class="btn__value" id="censor-label">Black box</span>
-            <span class="btn__caret">&#9662;</span>
-          </button>
+          <!-- subtitles -->
+          <div style="position:relative">
+            <button class="btn" id="btn-subs" disabled>
+              <span class="btn__key">SUB</span>
+              <span class="btn__value" id="sub-name">none</span>
+              <span class="btn__accent hidden" id="sub-delay-chip"></span>
+            </button>
+            <div class="pop pop--subs hidden" id="pop-subs">
+              <div style="font-size:var(--t-base);font-weight:var(--w-semi);margin-bottom:12px">Subtitles</div>
+              <div class="subfile" id="sub-file-row">
+                <span class="subfile__name" id="sub-file-name">No subtitle attached</span>
+                <span class="badge badge--ok hidden" id="sub-attached">ATTACHED</span>
+              </div>
+              <div class="mono" style="font-size:var(--t-mono-sm);color:var(--text-6);margin-bottom:14px">
+                files sitting next to the movie load automatically
+              </div>
+              <div class="subsync">
+                <span class="subsync__label">Sync delay</span>
+                <button class="stepper" id="sub-minus" title="Show subtitles earlier">&#8722;</button>
+                <span class="subsync__value mono" id="sub-delay-value">0.00 s</span>
+                <button class="stepper" id="sub-plus" title="Show subtitles later">+</button>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn--secondary" style="flex:1;justify-content:center" id="sub-attach">Attach file&#8230;</button>
+                <button class="btn" id="sub-remove">Remove</button>
+              </div>
+              <div class="mono" style="margin-top:12px;font-size:var(--t-mono-sm);color:var(--text-6)">
+                applied live &middot; remembered per movie
+              </div>
+            </div>
+          </div>
 
+          <!-- censor picker -->
+          <div style="position:relative">
+            <button class="btn" id="btn-censor">
+              <span class="btn__key">CENSOR</span>
+              <span class="btn__value" id="censor-label">Black box</span>
+              <span class="btn__caret">&#9662;</span>
+            </button>
+            <div class="pop pop--censor hidden" id="pop-censor">
+              <div class="pop__title">Censor appearance</div>
+              <div id="censor-options"></div>
+              <div class="pop__note">
+                applied live over IPC &middot; no restart, no rescan &middot; blur styles are
+                see-through by design
+              </div>
+            </div>
+          </div>
+
+          <button class="btn" id="btn-cast" disabled>CAST</button>
           <button class="btn" id="btn-library">LIBRARY</button>
-          <button class="btn btn--icon" id="btn-settings" title="Settings">&#9974;</button>
+          <button class="btn btn--icon" id="btn-fullscreen" title="Fullscreen (F)">&#9974;</button>
+          <button class="btn btn--icon" id="btn-settings" title="Settings">&#9881;</button>
         </div>
+      </div>
+    </div>
+
+    <!-- ====================================================== drawer ==== -->
+    <div class="drawer hidden" id="drawer">
+      <div class="drawer__head">
+        <div class="drawer__titlerow">
+          <span class="drawer__title">Library</span>
+          <span class="drawer__meta" id="library-meta">0 files</span>
+        </div>
+        <input class="field" id="library-filter" placeholder="Filter by name&#8230;" spellcheck="false">
+      </div>
+      <div class="drawer__list" id="library-list"></div>
+      <div class="drawer__foot">
+        <button class="btn btn--secondary" id="btn-add">Add movies&#8230;</button>
+        <button class="btn" id="btn-scan-all">Scan all unscanned</button>
+        <span class="spacer"></span>
+        <button class="btn btn--icon" id="btn-close-drawer" title="Close">&#x2715;</button>
+      </div>
+    </div>
+
+    <!-- ======================================================== cast ==== -->
+    <div class="modal-veil hidden" id="cast-modal">
+      <div class="modal">
+        <div class="modal__head">
+          <span class="modal__title">Cast to device</span>
+          <span class="modal__meta" id="cast-meta">searching&#8230;</span>
+        </div>
+        <div class="modal__body" id="cast-devices"></div>
+        <div class="callout callout--ok">
+          the cover is burned into the pixels before anything leaves this machine<br>
+          x264 veryfast / aac &middot; fragmented MP4 over your local network
+        </div>
+        <div class="callout callout--warn">
+          Local playback stops, one pipeline at a time. The TV cannot seek or pause a
+          live stream; stop and cast again instead.
+        </div>
+        <div class="modal__foot">
+          <span class="mono" style="flex:1;font-size:var(--t-mono-sm);color:var(--text-6)">requires a finished scan</span>
+          <button class="btn" id="cast-cancel">Cancel</button>
+          <button class="btn btn--primary" id="cast-start" disabled>Start cast</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================== settings ==== -->
+    <div class="settings hidden" id="settings">
+      <div class="settings__head">
+        <span class="settings__title">Settings</span>
+        <span class="settings__note" id="settings-note">changes apply to the next scan</span>
+        <span class="spacer"></span>
+        <button class="btn btn--icon" id="settings-close" title="Close">&#x2715;</button>
+      </div>
+
+      <div class="settings__grid">
+        <div class="settings__col">
+          <div class="eyebrow">Appearance</div>
+          <div class="setting">
+            <div class="setting__text">
+              <div class="setting__name">Theme</div>
+              <div class="setting__hint">the picture and its controls stay dark in every theme</div>
+            </div>
+            <div class="segmented" id="theme-switch">
+              <button class="segmented__item" data-theme="light">Light</button>
+              <button class="segmented__item" data-theme="dark">Dark</button>
+              <button class="segmented__item" data-theme="system">System</button>
+            </div>
+          </div>
+
+          <div class="eyebrow" style="margin-top:10px">Timing</div>
+          <div class="setting">
+            <div class="setting__text">
+              <div class="setting__name">Lead before</div>
+              <div class="setting__hint">start covering this long before a detection</div>
+            </div>
+            <span class="setting__value" id="v-lead">5.0 s</span>
+          </div>
+          <div class="setting">
+            <div class="setting__text">
+              <div class="setting__name">Hold after</div>
+              <div class="setting__hint">keep covering this long afterwards</div>
+            </div>
+            <span class="setting__value" id="v-hold">10.0 s</span>
+          </div>
+          <div class="setting">
+            <div class="setting__text">
+              <div class="setting__name">Live head start</div>
+              <div class="setting__hint">how far ahead detection gets before playback begins</div>
+            </div>
+            <span class="setting__value" id="v-head">5 min</span>
+          </div>
+          <div class="setting">
+            <div class="setting__text">
+              <div class="setting__name">Window cap</div>
+              <div class="setting__hint">ffmpeg stops parsing past 98 nested windows</div>
+            </div>
+            <span class="setting__value" id="v-cap">90</span>
+          </div>
+        </div>
+
+        <div class="settings__col">
+          <div class="eyebrow">Detection</div>
+          <div class="setting">
+            <div class="setting__text">
+              <div class="setting__name">Confidence cutoff</div>
+              <div class="setting__hint">NudeNet score below which a region is ignored</div>
+            </div>
+            <span class="setting__value" id="v-threshold">0.55</span>
+          </div>
+          <div class="setting">
+            <div class="setting__text">
+              <div class="setting__name">Live sampling</div>
+              <div class="setting__hint">frames per second fed to the detector</div>
+            </div>
+            <span class="setting__value" id="v-fps">3 fps</span>
+          </div>
+          <div class="setting">
+            <div class="setting__text">
+              <div class="setting__name">Box margin</div>
+              <div class="setting__hint">every box grows by this much on each side</div>
+            </div>
+            <span class="setting__value" id="v-margin">8%</span>
+          </div>
+
+          <div class="setting setting--stack">
+            <div class="setting__name">What gets covered</div>
+            <div class="labelset">
+              <span class="label-chip">FEMALE_BREAST_EXPOSED</span>
+              <span class="label-chip">FEMALE_GENITALIA_EXPOSED</span>
+              <span class="label-chip">MALE_GENITALIA_EXPOSED</span>
+              <span class="label-chip">BUTTOCKS_EXPOSED</span>
+              <span class="label-chip">ANUS_EXPOSED</span>
+            </div>
+            <div class="mono" style="margin-top:10px;font-size:var(--t-mono-sm);line-height:1.5;color:var(--text-6)">
+              audio is never analysed &middot; kissing, suggestive scenes and violence are
+              not covered
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings__foot">
+        <span class="mono" style="font-size:var(--t-mono-sm);color:var(--text-6)">
+          everything runs on this machine &middot; no telemetry &middot; nothing is uploaded
+        </span>
+        <span class="spacer"></span>
+        <span class="mono" style="font-size:var(--t-mono-sm);color:var(--text-6)" id="version-label"></span>
       </div>
     </div>
   </div>
 
-  <!-- status bar --------------------------------------------------------- -->
+  <!-- ===================================================== status bar === -->
   <div class="statusbar">
     <span class="statusbar__guarantee">&#9679; fail-closed</span>
-    <span>mpv --wid &middot; stage pinned to HWND_BOTTOM</span>
+    <span id="status-engine">ready</span>
     <span class="spacer"></span>
-    <span id="mode-label">scanned plan mode</span>
+    <span id="mode-label"></span>
   </div>
 
 </div>
