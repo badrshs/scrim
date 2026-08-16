@@ -1,12 +1,16 @@
 name: Release
 
+# Manual only, on purpose. Releases are cut with release.ps1, which builds and
+# publishes from a machine where the result can actually be launched and looked
+# at before it goes out. A tag-triggered job here would race that and try to
+# replace a published release with its own draft.
+#
+# This exists for releasing without a Windows machine to hand.
 on:
-  push:
-    tags: ["v*"]
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag to release"
+        description: "Tag to release, e.g. v0.1.0"
         required: true
 
 jobs:

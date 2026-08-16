@@ -45,7 +45,27 @@ $version = (Select-String -Path "$repo\Cargo.toml" -Pattern '^version\s*=\s*"(.+
 
 $dist = "$repo\dist"
 $portable = "$dist\scrim-$version-windows-x64"
-if (Test-Path $portable) { Remove-Item $portable -Recurse -Force }
+
+# Windows will refuse to delete a directory anything still holds a handle on,
+# and an antivirus scan of a 280 MB folder counts. Retry, then step aside
+# rather than failing a release build over a transient lock.
+if (Test-Path $portable) {
+    $cleared = $false
+    foreach ($attempt in 1..5) {
+        try {
+            Remove-Item $portable -Recurse -Force -ErrorAction Stop
+            $cleared = $true
+            break
+        }
+        catch {
+            Start-Sleep -Seconds 3
+        }
+    }
+    if (-not $cleared) {
+        $portable = "$portable-$(Get-Date -Format 'HHmmss')"
+        Write-Host "  previous folder is locked; building into $(Split-Path $portable -Leaf)" -ForegroundColor Yellow
+    }
+}
 New-Item -ItemType Directory -Force -Path $portable | Out-Null
 
 # --- portable folder -------------------------------------------------------
