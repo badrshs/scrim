@@ -1,0 +1,86 @@
+name: Something was covered that should not have been (or missed)
+description: Report over-covering or under-covering
+labels: ["coverage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please read this first, it answers most reports:
+
+        **Scrim cannot detect violence or blood.** There is no classifier for
+        either, only five nudity labels. If a fight scene is covered, it is a
+        false positive on bare skin.
+
+        While the picture is covered, the status bar names the reason. If it
+        says **seen once** in amber, that is a single sampled frame of
+        evidence, which is what most false positives look like. Raising
+        **Settings → Ignore single glimpses** to 2 removes those, and applies
+        immediately without a rescan.
+
+        If that solves it, no issue is needed. If it does not, carry on.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Which way did it go wrong?
+      options:
+        - Covered something that did not need it
+        - Missed something that should have been covered
+        - The box was in the wrong place
+        - The box was far larger than the subject
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: What did the status bar say while it was covered?
+      description: The whole line, e.g. `FEMALE_BREAST_EXPOSED 0.61  seen 4x over 1.0s · from 00:41:12`
+      placeholder: "leave blank if nothing was covered"
+    validations:
+      required: false
+
+  - type: textarea
+    id: settings
+    attributes:
+      label: Your detection settings
+      description: From Settings. Ignore single glimpses, confidence cutoff, lead, hold.
+      placeholder: |
+        Ignore single glimpses: 1
+        Confidence cutoff: 0.55
+        Lead before: 5.0 s
+        Hold after: 10.0 s
+    validations:
+      required: true
+
+  - type: input
+    id: timestamp
+    attributes:
+      label: Where in the film
+      placeholder: "00:41:12"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Please do not attach video, screenshots of the scene, or the film
+        itself.** Describe it in words. The timestamp and the reason line are
+        enough to work from, and nobody needs the frame.
+
+  - type: textarea
+    id: scene
+    attributes:
+      label: What was actually on screen, in words
+      placeholder: "Two clothed people fighting outdoors, one with a bare shoulder"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Scrim version
+      description: Bottom right of Settings
+      placeholder: "0.1.0"
+    validations:
+      required: true

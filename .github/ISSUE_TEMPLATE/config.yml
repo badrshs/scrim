@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Why is a fight scene being covered?
+    url: https://github.com/badrshs/scrim#why-is-this-covered
+    about: Scrim has no violence detection. This explains what is actually happening and how to fix it.
+  - name: Why are the boxes so large on some films?
+    url: https://github.com/badrshs/scrim/blob/main/docs/expression-limit.md
+    about: ffmpeg's expression parser caps how many separate covered spans one graph can hold.

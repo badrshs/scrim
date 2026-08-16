@@ -13,6 +13,14 @@ Scrim plays a movie and covers explicit nudity with a black box, a white box,
 or a blur, composited live as the film plays. The original file is never
 modified and never re-encoded.
 
+<p align="center">
+  <img src="docs/screenshots/library-light.png" alt="Scrim's library, light theme" width="49%">
+  <img src="docs/screenshots/settings-dark.png" alt="Scrim's settings, dark theme" width="49%">
+</p>
+
+<p align="center"><sub>Light and dark. The picture itself stays dark in both.<br>
+No film frames in these shots, and none in this repository.</sub></p>
+
 It is built around one rule, and every design decision in it defers to that
 rule:
 
