@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" class="theme-dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scrim</title>
+  <link rel="stylesheet" href="./styles/tokens.css">
+  <link rel="stylesheet" href="./styles/app.css">
+</head>
+<body class="transparent-shell">
+
+<div class="app">
+
+  <!-- window chrome ------------------------------------------------------ -->
+  <div class="titlebar">
+    <div class="titlebar__brand">
+      <div class="mark" aria-hidden="true"></div>
+      <span class="titlebar__name">Scrim</span>
+    </div>
+    <div class="titlebar__center">
+      <span class="titlebar__file" id="now-playing">nothing playing</span>
+      <span class="badge badge--ok" id="plan-badge">PLAN OK &middot; 319 WINDOWS</span>
+    </div>
+    <div class="titlebar__controls">
+      <button class="wincontrol" data-win="minimize" title="Minimise">&#x2500;</button>
+      <button class="wincontrol" data-win="maximize" title="Maximise">&#x25A1;</button>
+      <button class="wincontrol wincontrol--close" data-win="close" title="Close">&#x2715;</button>
+    </div>
+  </div>
+
+  <!-- the stage ---------------------------------------------------------- -->
+  <!-- Everything inside .stage floats above mpv's child window. The
+       .stage__video element must never paint: it is the hole the picture
+       shows through, and its measured rectangle is what positions mpv. -->
+  <div class="stage theme-dark is-idle" id="stage">
+    <div class="stage__video" id="stage-video"></div>
+
+    <div class="stage__empty" id="stage-empty">
+      <div>
+        <div class="stage__empty-mark" aria-hidden="true"></div>
+        <div>Open a movie to begin</div>
+      </div>
+    </div>
+
+    <div class="status" id="status">
+      <span class="status__live" id="status-line1">READY</span>
+      <span id="status-line2">lead 5.0s &middot; hold 10.0s &middot; thr 0.55</span>
+      <span id="status-line3">compositing spike</span>
+    </div>
+
+    <div class="controls" id="controls">
+      <div class="seek" id="seek">
+        <div class="seek__track"></div>
+        <div class="seek__played" id="seek-played" style="width:0%"></div>
+        <div id="seek-windows"></div>
+        <div class="seek__handle" id="seek-handle" style="left:0%"></div>
+      </div>
+
+      <div class="controls__row">
+        <div class="controls__group">
+          <button class="btn btn--transport" id="btn-play" title="Play or pause (Space)">&#9654;</button>
+          <button class="btn btn--transport" id="btn-stop" title="Stop">&#9632;</button>
+          <span class="time"><span id="time-now">00:00:00</span>
+            <span class="time__total">/ <span id="time-total">--:--:--</span></span></span>
+        </div>
+
+        <div class="controls__group">
+          <div class="volume">
+            <span class="btn__key">VOL</span>
+            <div class="volume__track" id="volume-track">
+              <div class="volume__fill" style="width:68%"></div>
+              <div class="volume__handle" style="left:68%"></div>
+            </div>
+            <span class="volume__value" id="volume-value">68</span>
+          </div>
+
+          <button class="btn" id="btn-censor">
+            <span class="btn__key">CENSOR</span>
+            <span class="btn__value" id="censor-label">Black box</span>
+            <span class="btn__caret">&#9662;</span>
+          </button>
+
+          <button class="btn" id="btn-library">LIBRARY</button>
+          <button class="btn btn--icon" id="btn-settings" title="Settings">&#9974;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- status bar --------------------------------------------------------- -->
+  <div class="statusbar">
+    <span class="statusbar__guarantee">&#9679; fail-closed</span>
+    <span>mpv --wid &middot; stage pinned to HWND_BOTTOM</span>
+    <span class="spacer"></span>
+    <span id="mode-label">scanned plan mode</span>
+  </div>
+
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

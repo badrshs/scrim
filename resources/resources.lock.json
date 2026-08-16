@@ -1,0 +1,26 @@
+﻿{
+    "ffmpeg.exe":  {
+                       "url":  "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip",
+                       "sha256":  "4762609C60E0C6ACFA478B6421D06FD1D1EBBA4F5F033AAC51EA316D960B8D1D",
+                       "bytes":  145811456,
+                       "license":  "GPL-3.0 (BtbN gpl build)"
+                   },
+    "mpv.exe":  {
+                    "url":  "https://github.com/shinchiro/mpv-winbuild-cmake/releases/download/20260814/mpv-x86_64-20260814-git-7b8915bc1d.7z",
+                    "sha256":  "09DC5C350A70B536CC91015E7A856F77C933FA9D7F4C41563666E51C998A0243",
+                    "bytes":  119761408,
+                    "license":  "GPL-2.0-or-later"
+                },
+    "onnxruntime.dll":  {
+                            "url":  "https://github.com/microsoft/onnxruntime/releases/download/v1.20.1/onnxruntime-win-x64-1.20.1.zip",
+                            "sha256":  "4CB41E89B8BF30578E1DD95E9C40292D61974A4BFCD666409302C4F0C5AA8CE0",
+                            "bytes":  11569696,
+                            "license":  "MIT"
+                        },
+    "320n.onnx":  {
+                      "url":  "https://raw.githubusercontent.com/notAI-tech/NudeNet/master/nudenet/320n.onnx",
+                      "sha256":  "C15D8273ADAD2D0A92F014CC69AB2D6C311A06777A55545F2C4EB46F51911F0F",
+                      "bytes":  12150158,
+                      "license":  "AGPL-3.0 (this is why Scrim is AGPL-3.0)"
+                  }
+}

@@ -50,13 +50,16 @@ a:hover { color: var(--accent-hover); }
 
 /* ============================================================ app shell === */
 
+/* No background. mpv's window sits behind the webview, so anything that paints
+ * here paints over the picture. Opaque surfaces declare their own background
+ * individually: the title bar, the status bar, the drawer, dialogs, Settings. */
 .app {
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  background: var(--app);
+  background: transparent;
 }
 
 /* ------------------------------------------------------------- titlebar -- */
@@ -177,12 +180,16 @@ a:hover { color: var(--accent-hover); }
 
 /* ---------------------------------------------------------------- stage -- */
 
+/* The hole. Transparent while a movie is on screen so mpv shows through, and
+ * painted only when there is nothing to show. */
 .stage {
   flex: 1;
   position: relative;
-  background: var(--stage);
+  background: transparent;
   overflow: hidden;
 }
+
+.stage.is-idle { background: var(--stage); }
 
 /* Where mpv's child window shows through. Nothing may paint here. */
 .stage__video {

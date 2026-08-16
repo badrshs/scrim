@@ -32,6 +32,9 @@ pub struct WindowParams {
     /// Grow every box by this fraction of the frame on each side.
     pub margin: f64,
     /// Above this many windows, widen `window_max` and rebuild.
+    ///
+    /// This is not a performance knob, it is a correctness one. See the note
+    /// on the default below.
     pub max_windows: usize,
 }
 
@@ -40,13 +43,25 @@ impl Default for WindowParams {
         // livescan.py: PAD_BEFORE, PAD_AFTER, GAP_MERGE, WINDOW_MAX, MARGIN,
         // MAX_WINDOWS. Changing any of these changes what viewers see, so they
         // are pinned to the values the golden fixtures were generated with.
+        //
+        // max_windows is the one value NOT inherited from Python. livescan.py
+        // used 380 and pfplay.py used 400, but ffmpeg's expression evaluator
+        // gives up at 99 levels of recursion, and this graph nests one level
+        // per window. The old cap was never hit in practice because pureframe
+        // plans produced around 66 windows for a feature film; the linear
+        // scanner produces 319 for the same movie, and ffmpeg rejects that
+        // outright with "Missing ')' or too many args".
+        //
+        // A rejected graph is the worst possible failure for this app: mpv
+        // would drop the filter and play the movie uncovered. 90 leaves
+        // headroom under the measured limit of 98. See docs/expression-limit.md.
         Self {
             pad_before: 5.0,
             pad_after: 10.0,
             gap_merge: 1.5,
             window_max: 2.0,
             margin: 0.08,
-            max_windows: 380,
+            max_windows: 90,
         }
     }
 }
