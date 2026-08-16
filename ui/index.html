@@ -169,8 +169,15 @@
         </div>
       </div>
     </div>
+  </div><!-- /stage -->
 
-    <!-- ====================================================== drawer ==== -->
+  <!-- The drawer, the cast dialog and Settings sit OUTSIDE the stage on
+       purpose. The stage forces the dark palette on everything inside it, and
+       these three are places you read rather than places you watch, so they
+       follow the chosen theme instead. -->
+
+  <!-- ====================================================== drawer ==== -->
+  <div class="panels" id="panels">
     <div class="drawer hidden" id="drawer">
       <div class="drawer__head">
         <div class="drawer__titlerow">
@@ -316,7 +323,7 @@
         <span class="mono" style="font-size:var(--t-mono-sm);color:var(--text-6)" id="version-label"></span>
       </div>
     </div>
-  </div>
+  </div><!-- /panels -->
 
   <!-- ===================================================== status bar === -->
   <div class="statusbar">

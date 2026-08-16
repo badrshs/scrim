@@ -27,7 +27,11 @@ const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 /// Frames per second fed to the detector. From `livescan.py::SAMPLE_FPS`.
 pub const SAMPLE_FPS: f64 = 3.0;
 /// Confidence cutoff. From `livescan.py::THRESHOLD`.
-pub const THRESHOLD: f32 = 0.55;
+///
+/// Kept as f64 as well, because widening the f32 for the plan file writes
+/// `0.550000011920929` into a document people read.
+pub const THRESHOLD_F64: f64 = 0.55;
+pub const THRESHOLD: f32 = THRESHOLD_F64 as f32;
 /// The detector input is capped at this width to keep the pipe cheap.
 const MAX_DETECT_WIDTH: i64 = 1280;
 
@@ -147,7 +151,7 @@ impl Scan {
             },
             detector: Detector {
                 sample_fps: SAMPLE_FPS,
-                threshold: THRESHOLD as f64,
+                threshold: THRESHOLD_F64,
                 detect_width: dw,
                 detect_height: dh,
             },

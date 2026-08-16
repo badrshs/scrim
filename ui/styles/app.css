@@ -739,7 +739,26 @@ a:hover { color: var(--accent-hover); }
   color: var(--text-6);
 }
 
-/* ============================================================== drawer === */
+/* ============================================================== panels === */
+/*
+ * The drawer, the cast dialog and Settings. They overlay the picture but are
+ * NOT inside .stage, because the stage pins the dark palette to everything
+ * within it and these follow the user's theme. They span the area between the
+ * title bar and the status bar, and pass clicks through where they paint
+ * nothing so the controls underneath stay reachable.
+ */
+
+.panels {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--h-titlebar);
+  bottom: var(--h-statusbar);
+  pointer-events: none;
+  z-index: 60;
+}
+
+.panels > * { pointer-events: auto; }
 
 .drawer {
   position: absolute;

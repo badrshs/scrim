@@ -13,7 +13,10 @@
 *.vtt
 *.sub
 
-# Scan output and per-user state
+# Scan output and per-user state.
+# Scrim writes *.scrimplan.json next to each movie; *.censorplan.json is the
+# format the Python predecessor wrote, kept so an old checkout stays clean.
+*.scrimplan.json
 *.censorplan.json
 *.censorplan.preview.html
 *.plan.json
