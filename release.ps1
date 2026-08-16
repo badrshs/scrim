@@ -122,8 +122,10 @@ if ($Version -ne $currentVersion) {
 # ------------------------------------------------------------------ build --
 
 Step "build"
-$packageArgs = @()
-if ($SkipTests) { $packageArgs += "-SkipTests" }
+# Hashtable, not an array: splatting an array passes its elements
+# positionally, so "-SkipTests" would arrive as a value rather than a switch.
+$packageArgs = @{}
+if ($SkipTests) { $packageArgs["SkipTests"] = $true }
 & "$repo\tools\package.ps1" @packageArgs
 if ($LASTEXITCODE -ne 0) { throw "packaging failed" }
 
