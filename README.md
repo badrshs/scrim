@@ -27,6 +27,7 @@ that matters.
 ## Contents
 
 - [What gets covered](#what-gets-covered)
+- [Why is this covered?](#why-is-this-covered)
 - [The two ways to watch](#the-two-ways-to-watch)
 - [Timing](#timing)
 - [How the covering works](#how-the-covering-works)
@@ -60,6 +61,42 @@ covering, above a confidence of 0.55:
 **Not** covered, by deliberate decision: kissing, suggestive scenes, clothed
 bodies, and violence. Audio is never analysed and never altered. Widening this
 list is a change to what the product is, not a setting.
+
+Scrim has no concept of violence or blood. There is no classifier for them, so
+it cannot cover them on purpose. If a fight scene gets covered, that is a false
+positive on bare skin, and the next section is about what to do with it.
+
+## Why is this covered?
+
+While the picture is covered, the status bar names the reason:
+
+```
+● FEMALE_BREAST_EXPOSED 0.61   seen 4x over 1.0s · from 00:41:12
+● MALE_GENITALIA_EXPOSED 0.58  seen once · from 00:14:20
+```
+
+The label, the model's confidence, how many sampled frames it appeared in, and
+when it was actually spotted. The second line is amber because the run was seen
+**once**: a single frame at 3 fps sampling, one twelfth of a second of evidence,
+which still buys a full lead and hold of covering.
+
+That is what most false positives look like. Bare shoulders in a fight, a torso
+in dim light, a fur collar at the wrong angle.
+
+**If unrelated scenes are being covered, raise "Ignore single glimpses" to 2 in
+Settings.** On the test film that took covering from 87 spans and 10:06 of
+runtime down to 55 spans and 6:06, removing about four minutes of spurious
+covering while keeping every sustained detection. It takes effect immediately,
+with no rescan, because plans store what was *detected* rather than what to
+cover.
+
+The trade is real and worth stating plainly: genuine nudity visible for only
+one sampled frame will no longer be covered. The default stays at 1 for that
+reason. It is your call, not the program's.
+
+Raising the confidence cutoff is the other lever, and a blunter one. On real
+footage true detections score roughly 0.55 to 0.72, so past about 0.70 it
+starts deleting real ones rather than false ones.
 
 ## The two ways to watch
 
@@ -261,14 +298,17 @@ Tests that need `resources/` or the sample movies skip cleanly without them.
 | Lead before | start covering this long before a detection | 5.0 s |
 | Hold after | keep covering this long after | 10.0 s |
 | Live head start | how far ahead detection gets before playback | 5 min |
+| **Ignore single glimpses** | **detections in a row needed before covering** | **1** |
+| Confidence cutoff | score below which a region is ignored | 0.55 |
 | Window cap | maximum covered windows in one graph | 90 |
-| Confidence cutoff | NudeNet score below which a region is ignored | 0.55 |
 | Live sampling | frames per second fed to the detector | 3 fps |
 | Box margin | how much each box grows on every side | 8% |
 
-Timing settings re-derive coverage instantly, because plans store raw
-detections rather than pre-built windows. Changing the lead does not mean
-rescanning a film.
+Every setting above the window cap re-derives coverage **instantly**, on a movie
+already playing, with no rescan. That is the point of storing raw detections in
+the plan rather than finished windows: changing the lead, or deciding to ignore
+single-frame runs, is a matter of rebuilding the filtergraph, not of watching an
+hour of film again.
 
 **The video area stays dark in every theme.** Light theme applies to the window
 chrome, library, settings and dialogs. A white control bar over a movie frame
@@ -278,7 +318,7 @@ blows out the picture and hurts in a dark room.
 
 | File | Where | What |
 |---|---|---|
-| `<movie>.scrimplan.json` | next to the movie | detections from a scan |
+| `<movie>.scrimplan.json` | next to the movie | detections from a scan, with the label and confidence behind each one |
 | `library.json` | `%APPDATA%\app.scrim.player` | your movie list and per-movie state |
 | `settings.json` | `%APPDATA%\app.scrim.player` | your settings |
 | `current_play.conf` | `%APPDATA%\app.scrim.player` | the filtergraph for this playback |
@@ -289,6 +329,11 @@ blows out the picture and hurts in a dark room.
   flashes shorter than a third of a second at 3 fps sampling, and it
   occasionally flags a bare torso. The 5 s lead and 10 s hold absorb most
   timing misses, but this is a tool, not a guarantee about a specific film.
+- **False positives are expensive.** One stray frame still produces 15 seconds
+  of covering. On the test film, single-frame runs accounted for roughly 40% of
+  all covering. The status bar names the reason so you can tell them apart, and
+  "Ignore single glimpses" removes them. See
+  [Why is this covered?](#why-is-this-covered).
 - **Dense films get larger boxes.** Above 90 covered windows Scrim merges into
   longer spans, so the box grows to the union of a longer stretch. Forced by
   ffmpeg's expression limit; the alternative is a graph that covers nothing.

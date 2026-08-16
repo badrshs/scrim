@@ -25,8 +25,12 @@ fn is_zero(v: &f64) -> bool {
     *v == 0.0
 }
 
+/// `#[serde(default)]` on the container is load-bearing: a settings file
+/// written by an older build has no entry for a field added since, and without
+/// this the whole file fails to parse and everyone's configuration silently
+/// resets to defaults on upgrade.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", default)]
 pub struct Settings {
     /// "light", "dark" or "system".
     pub theme: String,
@@ -38,6 +42,11 @@ pub struct Settings {
     pub hold_after: f64,
     pub margin: f64,
     pub threshold: f64,
+    /// Detections in a row a run needs before anything is covered.
+    ///
+    /// 1 covers every glimpse the detector had. 2 ignores runs seen in a
+    /// single sampled frame, which is what most false positives look like.
+    pub min_run: usize,
 }
 
 impl Default for Settings {
@@ -51,7 +60,26 @@ impl Default for Settings {
             hold_after: 10.0,
             margin: 0.08,
             threshold: 0.55,
+            min_run: 1,
         }
+    }
+}
+
+impl Settings {
+    /// Clamp anything a hand-edited settings file could put out of range.
+    ///
+    /// The threshold ceiling matters: on real footage genuine nudity scores
+    /// around 0.55 to 0.72, so a value near 1.0 would quietly disable covering
+    /// altogether while the interface still claimed to be working.
+    pub fn sanitised(mut self) -> Self {
+        self.volume = self.volume.clamp(0, 130);
+        self.head_start_minutes = self.head_start_minutes.clamp(1, 10);
+        self.lead_before = self.lead_before.clamp(0.0, 30.0);
+        self.hold_after = self.hold_after.clamp(0.0, 60.0);
+        self.margin = self.margin.clamp(0.0, 0.5);
+        self.threshold = self.threshold.clamp(0.30, 0.90);
+        self.min_run = self.min_run.clamp(1, 10);
+        self
     }
 }
 
@@ -197,9 +225,42 @@ mod tests {
         // Unknown fields must not wipe someone's configuration.
         let text = r#"{"theme":"dark","censorStyle":"white_box","volume":80,
             "headStartMinutes":3,"leadBefore":5.0,"holdAfter":10.0,
-            "margin":0.08,"threshold":0.55,"somethingNew":true}"#;
+            "margin":0.08,"threshold":0.55,"minRun":2,"somethingNew":true}"#;
         let s: Settings = serde_json::from_str(text).unwrap();
         assert_eq!(s.theme, "dark");
         assert_eq!(s.volume, 80);
+        assert_eq!(s.min_run, 2);
+    }
+
+    #[test]
+    fn a_settings_file_from_an_older_version_keeps_what_it_had() {
+        // The upgrade case, which is the one that loses people's settings if
+        // it is wrong: no minRun at all, because that build predates it.
+        let text = r#"{"theme":"dark","censorStyle":"blur_medium","volume":70,
+            "headStartMinutes":3,"leadBefore":2.0,"holdAfter":4.0,
+            "margin":0.08,"threshold":0.55}"#;
+        let s: Settings = serde_json::from_str(text).unwrap();
+        assert_eq!(s.theme, "dark", "the theme they chose must survive");
+        assert_eq!(s.censor_style, "blur_medium");
+        assert_eq!(s.lead_before, 2.0);
+        assert_eq!(s.min_run, 1, "the new field takes its default");
+    }
+
+    #[test]
+    fn hand_edited_settings_are_clamped_to_something_workable() {
+        // A threshold near 1.0 would disable covering while the interface
+        // still claimed to be working, which is the worst kind of wrong.
+        let wild = Settings {
+            threshold: 0.99,
+            min_run: 999,
+            lead_before: -5.0,
+            volume: 9999,
+            ..Settings::default()
+        }
+        .sanitised();
+        assert_eq!(wild.threshold, 0.90);
+        assert_eq!(wild.min_run, 10);
+        assert_eq!(wild.lead_before, 0.0);
+        assert_eq!(wild.volume, 130);
     }
 }

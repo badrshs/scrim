@@ -17,8 +17,10 @@ mod util;
 mod window;
 
 pub use graph::{build_graph, CensorStyle};
-pub use plan::{Detection, Detector, Plan, PlanError, Source, SCHEMA_VERSION};
-pub use window::{build_windows, CensorWindow, WindowParams};
+pub use plan::{
+    DetBox, Detection, Detector, Plan, PlanError, Source, MIN_SCHEMA_VERSION, SCHEMA_VERSION,
+};
+pub use window::{build_windows, CensorWindow, Reason, WindowParams};
 
 /// Everything the player needs to start a movie, derived from a plan.
 #[derive(Debug, Clone)]
@@ -53,6 +55,21 @@ impl Coverage {
 
     pub fn graph(&self, fw: i64, fh: i64, style: CensorStyle) -> String {
         build_graph(&self.full_runs, &self.windows, fw, fh, style)
+    }
+
+    /// Why the picture is covered at this moment, if it is.
+    pub fn reason_at(&self, t: f64) -> Option<&Reason> {
+        // Windows can overlap where a hold runs into a fresh detection. The
+        // graph gives the later one priority, so this does too.
+        self.windows
+            .iter()
+            .filter(|w| w.contains(t))
+            .max_by(|a, b| {
+                a.start
+                    .partial_cmp(&b.start)
+                    .unwrap_or(std::cmp::Ordering::Equal)
+            })
+            .map(|w| &w.reason)
     }
 }
 

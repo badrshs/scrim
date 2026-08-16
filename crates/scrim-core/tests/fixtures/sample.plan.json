@@ -1,7 +1,7 @@
 {
- "schema_version": 1,
+ "schema_version": 2,
  "generator": "export_fixtures.py (python reference engine)",
- "created_at": "2026-08-16T04:36:54.561224+00:00",
+ "created_at": "2026-08-16T07:44:06.524352+00:00",
  "source": {
   "name": "sample.mp4",
   "size_bytes": 22670197,

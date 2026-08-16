@@ -157,6 +157,7 @@ function renderPlayback(p) {
   renderLive(p);
   renderFence(p);
   renderStatus(p);
+  renderCoverReason(p);
 
   $("mode-label").textContent = !p.file
     ? ""
@@ -241,6 +242,39 @@ function renderStatus(p) {
     `${p.windows?.length ?? 0} covered spans · ${fmtShort(p.coveredSeconds)} of runtime`;
   $("status-engine").textContent = p.playing ? (p.paused ? "paused" : "playing") : "ready";
   void show;
+}
+
+// Say why the picture is covered, while it is covered.
+//
+// The detector only ever reports nudity, so a cover during a fight scene is a
+// false positive rather than violence detection. Naming the label and its
+// confidence is what lets someone tell those apart, and a run seen in a single
+// sampled frame is called out because that is the shape a false positive takes.
+function renderCoverReason(p) {
+  const el = $("cover-why");
+  const r = p.cover;
+  if (!r || !p.playing) {
+    el.classList.add("hidden");
+    return;
+  }
+
+  el.classList.remove("hidden");
+  el.classList.toggle("is-thin", r.detections === 1);
+
+  // Plans written before reasons were recorded have nothing to say.
+  $("cover-label").textContent = r.label || "COVERED";
+  $("cover-score").textContent = r.peakScore ? r.peakScore.toFixed(2) : "";
+
+  const seen =
+    r.detections === 1
+      ? "seen once"
+      : `seen ${r.detections}x over ${((r.detections - 1) / 3).toFixed(1)}s`;
+  $("cover-meta").textContent = `${seen} · from ${fmtClock(r.firstSeen)}`;
+  el.title =
+    r.detections === 1
+      ? "Detected in a single sampled frame. Isolated hits like this are often " +
+        "bare skin mistaken for nudity. Settings: require 2 detections in a row to ignore them."
+      : "Detected across several sampled frames in a row.";
 }
 
 function baseName(p) {
@@ -605,6 +639,15 @@ async function openCast() {
   };
 }
 
+// Ranges mirror Settings::sanitised in Rust, which is the authority.
+const TUNE_LIMITS = {
+  leadBefore: [0, 30],
+  holdAfter: [0, 60],
+  headStartMinutes: [1, 10],
+  threshold: [0.3, 0.9],
+  minRun: [1, 10],
+};
+
 function renderSettings() {
   const s = state.settings;
   $("v-lead").textContent = `${(s.leadBefore ?? 5).toFixed(1)} s`;
@@ -612,9 +655,30 @@ function renderSettings() {
   $("v-head").textContent = `${s.headStartMinutes ?? 5} min`;
   $("v-threshold").textContent = (s.threshold ?? 0.55).toFixed(2);
   $("v-margin").textContent = `${Math.round((s.margin ?? 0.08) * 100)}%`;
+
+  const minRun = s.minRun ?? 1;
+  $("v-minrun").textContent = minRun;
+  $("minrun-hint").textContent =
+    minRun <= 1
+      ? "covering every glimpse, including single frames that are often false positives"
+      : `runs seen fewer than ${minRun} times in a row are ignored · ${((minRun - 1) / 3).toFixed(1)}s of evidence needed`;
+
   for (const b of document.querySelectorAll("#theme-switch .segmented__item")) {
     b.classList.toggle("is-active", b.dataset.theme === (s.theme || "system"));
   }
+}
+
+async function tune(key, step) {
+  const [lo, hi] = TUNE_LIMITS[key] || [0, 1e9];
+  const current = state.settings[key] ?? 0;
+  // Float steps accumulate visible drift (0.55 - 0.05 = 0.4999...).
+  const next = Math.min(hi, Math.max(lo, Math.round((current + step) * 1000) / 1000));
+  if (next === current) return;
+  state.settings[key] = next;
+  renderSettings();
+  // Rust re-derives coverage from the plan's detections and pushes the new
+  // filtergraph, so this applies to a movie already playing.
+  await call("set_settings", { settings: state.settings });
 }
 
 /* ================================================================ boot === */
@@ -718,6 +782,10 @@ on("btn-settings", "click", () => {
   renderSettings();
 });
 on("settings-close", "click", () => $("settings").classList.add("hidden"));
+
+document.querySelectorAll("[data-tune]").forEach((b) => {
+  b.addEventListener("click", () => tune(b.dataset.tune, parseFloat(b.dataset.step)));
+});
 
 document.querySelectorAll("#theme-switch .segmented__item").forEach((b) => {
   b.addEventListener("click", async () => {

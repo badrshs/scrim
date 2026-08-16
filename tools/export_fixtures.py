@@ -1,41 +1,51 @@
-"""Export golden test fixtures for the Rust port of the censoring engine.
+"""Export golden test fixtures for the Rust censoring engine.
 
 Run with the venv python, from the repo root:
 
-    .venv\\Scripts\\python.exe tools\\export_fixtures.py sample.mp4
-    .venv\\Scripts\\python.exe tools\\export_fixtures.py abc.mp4
+    .venv\\Scripts\\python.exe tools\\export_fixtures.py sample.mp4 abc.mp4
 
-For each video this runs the trusted live scanner to completion and writes
-two things into crates/scrim-core/tests/fixtures/:
+For each video this walks the movie exactly as `livescan.py` does (same ffmpeg
+command, same 3 fps, same NudeNet, same threshold) and writes two files into
+crates/scrim-core/tests/fixtures/:
 
-  <stem>.plan.json    the scan result in Scrim's native schema v1
-  <stem>.graphs.json  the filtergraph string the Python engine builds from
-                      that plan, for each of the five censor styles
+  <stem>.plan.json    the scan in Scrim's native schema v2
+  <stem>.graphs.json  the windows and filtergraphs the ORIGINAL livescan.py and
+                      pfplay.py derive from that scan
 
-The Rust implementation must reproduce every graph string byte for byte from
-the same plan file. That is the whole point: the rewrite is allowed to change
-how the code looks, never what gets covered.
+The frame loop is written out here rather than reused from livescan.py for one
+reason: livescan discards the label and confidence behind each box, and schema
+v2 records them so the player can explain why it is covering something. The
+detections are otherwise identical, and the windows and graphs are still built
+by the untouched reference code, which is the part the golden tests exist to
+pin down.
 
-Nothing here ships. It runs once, against the Python that already works, and
-its output is checked into the Rust test suite.
+Nothing here ships. It runs against the Python that already worked, and its
+output is checked into the Rust test suite.
 """
 
 import json
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO))
+sys.path.insert(0, str(REPO / "legacy"))
 
 import livescan  # noqa: E402
 import pfplay  # noqa: E402
 
 OUT = REPO / "crates" / "scrim-core" / "tests" / "fixtures"
+FFMPEG = REPO / "resources" / "ffmpeg.exe"
 
-# The five entries of the Censor picker, as player_app.App.CENSOR_CHOICES
-# maps them onto the engine's (style, strength) pair.
+CREATE_NO_WINDOW = 0x08000000
+
+# Must match scrim-detect. RECORD_FLOOR is below the covering threshold on
+# purpose: plans record what was seen so the threshold stays adjustable
+# afterwards without a rescan.
+RECORD_FLOOR = 0.35
+
 CENSOR_CHOICES = {
     "black_box": ("black", "strong"),
     "white_box": ("white", "strong"),
@@ -45,107 +55,141 @@ CENSOR_CHOICES = {
 }
 
 
-def scan(video: Path) -> livescan.LiveScanner:
-    """Run a full live scan, reporting progress on one line."""
-    ls = livescan.LiveScanner(video)
-    print(f"  source {ls.src_w}x{ls.src_h}  {ls.duration:.2f}s  "
-          f"detect at {ls.ex_w}x{ls.ex_h}")
+def scan(video: Path):
+    """Walk the movie, returning (meta, detections) with labels intact."""
+    from nudenet import NudeDetector
+    from pureframe.pipeline.detect.nudity import EXPLICIT_LABELS
+    from pureframe.pipeline.probe import probe_video
+    import numpy as np
+
+    meta = probe_video(video)
+    src_w, src_h = meta.width, meta.height
+    ex_w = min(src_w, 1280) // 2 * 2
+    ex_h = int(src_h * ex_w / src_w) // 2 * 2
+    sx, sy = src_w / ex_w, src_h / ex_h
+
+    detector = NudeDetector()
+    cmd = [str(FFMPEG), "-v", "error", "-i", str(video),
+           "-an", "-sn",
+           "-vf", f"fps={livescan.SAMPLE_FPS},scale={ex_w}:{ex_h}",
+           "-f", "rawvideo", "-pix_fmt", "bgr24", "-"]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                            stderr=subprocess.DEVNULL,
+                            creationflags=CREATE_NO_WINDOW)
+
+    frame_bytes = ex_w * ex_h * 3
+    detections = []
+    index = 0
     started = time.time()
-    ls.start()
-    while not ls.done and not ls.error:
-        time.sleep(2.0)
-        el = time.time() - started
-        speed = ls.frontier / el if el > 0 else 0
-        pct = 100 * ls.frontier / ls.duration if ls.duration else 0
-        print(f"\r  scanning {pct:5.1f}%  frontier {ls.frontier:8.1f}s  "
-              f"{speed:5.1f}x realtime  {len(ls._dets)} detections",
-              end="", flush=True)
+
+    while True:
+        buf = proc.stdout.read(frame_bytes)
+        if len(buf) < frame_bytes:
+            break
+        t = index / livescan.SAMPLE_FPS
+        index += 1
+        frame = np.frombuffer(buf, np.uint8).reshape(ex_h, ex_w, 3)
+
+        boxes = []
+        for d in detector.detect(frame):
+            if d.get("class") in EXPLICIT_LABELS and d.get("score", 0) >= RECORD_FLOOR:
+                x, y, w, h = d["box"]
+                boxes.append({
+                    "box": [int(x * sx), int(y * sy),
+                            int((x + w) * sx), int((y + h) * sy)],
+                    "label": d["class"],
+                    "score": round(float(d["score"]), 3),
+                })
+        if boxes:
+            detections.append({"t": round(t, 6), "boxes": boxes})
+
+        if index % 300 == 0:
+            el = time.time() - started
+            print(f"\r  {t:8.1f}s  {t/el:5.1f}x realtime  "
+                  f"{len(detections)} frames with detections", end="", flush=True)
+
+    proc.kill()
     print()
-    if ls.error:
-        raise RuntimeError(f"scan failed: {ls.error}")
-    print(f"  done in {time.time() - started:.0f}s")
-    return ls
-
-
-def native_plan(video: Path, ls: livescan.LiveScanner) -> dict:
-    """The scan result in Scrim's native plan schema, version 1.
-
-    Detections are stored raw rather than as built censor windows. Window
-    building depends on the lead / hold / margin tunables, and those are
-    editable in Settings, so keeping the plan at the detection layer means
-    changing a tunable re-derives instantly instead of forcing a rescan.
-    Boxes are in source pixel coordinates, already scaled up from the
-    detector's smaller input frame by LiveScanner._run.
-    """
-    return {
-        "schema_version": 1,
-        "generator": "export_fixtures.py (python reference engine)",
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "source": {
-            "name": video.name,
-            "size_bytes": video.stat().st_size,
-            "duration": round(ls.duration, 6),
-            "fps": round(float(ls.meta.fps), 6),
-            "width": ls.src_w,
-            "height": ls.src_h,
-        },
-        "detector": {
-            "sample_fps": livescan.SAMPLE_FPS,
-            "threshold": livescan.THRESHOLD,
-            "detect_width": ls.ex_w,
-            "detect_height": ls.ex_h,
-        },
-        "complete": True,
-        "detections": [
-            {"t": round(t, 6), "boxes": [list(b) for b in boxes]}
-            for t, boxes in ls._dets
-        ],
-    }
-
-
-def graphs(ls: livescan.LiveScanner) -> dict:
-    """The filtergraph for every censor style, plus the windows behind them."""
-    wins = ls.windows()
-    out = {
-        "window_count": len(wins),
-        "windows": [list(w) for w in wins],
-        "frame_width": ls.src_w,
-        "frame_height": ls.src_h,
-        "graphs": {},
-    }
-    for label, (style, strength) in CENSOR_CHOICES.items():
-        out["graphs"][label] = pfplay.build_graph(
-            [], wins, ls.src_w, ls.src_h, style, strength)
-    return out
+    return meta, ex_w, ex_h, detections
 
 
 def main():
     if len(sys.argv) < 2:
         sys.exit(f"usage: {Path(sys.argv[0]).name} <video> [video ...]")
+    if not FFMPEG.exists():
+        sys.exit("run tools/fetch-resources.ps1 first")
     OUT.mkdir(parents=True, exist_ok=True)
+
     for name in sys.argv[1:]:
         video = (REPO / name).resolve()
         if not video.exists():
             sys.exit(f"no such video: {video}")
         print(f"{video.name}:")
-        ls = scan(video)
 
-        plan = native_plan(video, ls)
-        g = graphs(ls)
+        meta, ex_w, ex_h, detections = scan(video)
+
+        plan = {
+            "schema_version": 2,
+            "generator": "export_fixtures.py (python reference engine)",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "source": {
+                "name": video.name,
+                "size_bytes": video.stat().st_size,
+                "duration": round(meta.duration_seconds, 6),
+                "fps": round(float(meta.fps), 6),
+                "width": meta.width,
+                "height": meta.height,
+            },
+            "detector": {
+                "sample_fps": livescan.SAMPLE_FPS,
+                "threshold": livescan.THRESHOLD,
+                "detect_width": ex_w,
+                "detect_height": ex_h,
+            },
+            "complete": True,
+            "detections": detections,
+        }
+
+        # Windows and graphs still come from the untouched reference code, fed
+        # the box-only view it expects and the same 0.55 covering threshold.
+        ls = object.__new__(livescan.LiveScanner)
+        ls.src_w, ls.src_h = meta.width, meta.height
+        ls.duration = meta.duration_seconds
+        ls._win_cache = (-1, [])
+        import threading
+        ls._lock = threading.Lock()
+        ls._dets = [
+            (d["t"], [tuple(b["box"]) for b in d["boxes"]
+                      if b["score"] >= livescan.THRESHOLD])
+            for d in detections
+        ]
+        ls._dets = [(t, boxes) for t, boxes in ls._dets if boxes]
+
+        wins = ls.windows()
+        graphs = {
+            "window_count": len(wins),
+            "windows": [list(w) for w in wins],
+            "frame_width": meta.width,
+            "frame_height": meta.height,
+            "graphs": {
+                label: pfplay.build_graph([], wins, meta.width, meta.height,
+                                          style, strength)
+                for label, (style, strength) in CENSOR_CHOICES.items()
+            },
+        }
 
         stem = video.stem
-        p_out = OUT / f"{stem}.plan.json"
-        g_out = OUT / f"{stem}.graphs.json"
-        p_out.write_text(json.dumps(plan, indent=1), encoding="utf-8")
-        g_out.write_text(json.dumps(g, indent=1), encoding="utf-8")
+        (OUT / f"{stem}.plan.json").write_text(
+            json.dumps(plan, indent=1), encoding="utf-8")
+        (OUT / f"{stem}.graphs.json").write_text(
+            json.dumps(graphs, indent=1), encoding="utf-8")
 
-        det_frames = len(plan["detections"])
-        covered = sum(w[1] - w[0] for w in g["windows"])
-        print(f"  {det_frames} detection frames -> {g['window_count']} windows"
-              f"  ({covered:.1f}s covered)")
-        print(f"  wrote {p_out.relative_to(REPO)}")
-        print(f"  wrote {g_out.relative_to(REPO)}")
-        print()
+        above = sum(1 for d in detections
+                    if any(b["score"] >= livescan.THRESHOLD for b in d["boxes"]))
+        print(f"  {len(detections)} frames recorded "
+              f"({above} at or above {livescan.THRESHOLD}) "
+              f"-> {len(wins)} windows")
+        print(f"  wrote {stem}.plan.json and {stem}.graphs.json\n")
 
 
 if __name__ == "__main__":

@@ -53,7 +53,12 @@ fn assert_matches_python(stem: &str) {
     let golden: Golden = serde_json::from_str(&fixture(&format!("{stem}.graphs.json")))
         .expect("graphs fixture should parse");
 
-    assert_eq!(plan.schema_version, 1, "{stem}: fixture schema drifted");
+    assert!(
+        plan.schema_version >= scrim_core::MIN_SCHEMA_VERSION
+            && plan.schema_version <= scrim_core::SCHEMA_VERSION,
+        "{stem}: fixture schema {} is outside the supported range",
+        plan.schema_version
+    );
     assert_eq!(plan.source.width, golden.frame_width, "{stem}: frame width");
     assert_eq!(
         plan.source.height, golden.frame_height,
@@ -117,6 +122,35 @@ fn sample_matches_python_engine() {
     // an empty graph means "play the file untouched", and if this crate ever
     // emitted a malformed empty graph mpv would refuse the file entirely.
     assert_matches_python("sample");
+}
+
+#[test]
+fn the_recorded_scan_carries_reasons_and_reaches_below_the_cutoff() {
+    // Plans record down to a floor beneath the covering threshold so the
+    // threshold can be moved later without rescanning. If the fixture only
+    // held detections at or above 0.55, the threshold tests would be
+    // exercising a range that never occurs in practice.
+    let plan: Plan = serde_json::from_str(&fixture("abc.plan.json")).unwrap();
+
+    let labelled = plan
+        .detections
+        .iter()
+        .flat_map(|d| &d.boxes)
+        .filter(|b| !b.label.is_empty())
+        .count();
+    assert!(labelled > 0, "schema v2 fixtures must carry labels");
+
+    let below = plan
+        .detections
+        .iter()
+        .flat_map(|d| &d.boxes)
+        .filter(|b| b.score < 0.55)
+        .count();
+    assert!(
+        below > 0,
+        "the fixture should include sub-threshold detections, or raising and \
+         lowering the cutoff cannot be tested against real data"
+    );
 }
 
 #[test]

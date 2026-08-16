@@ -1067,6 +1067,20 @@ a:hover { color: var(--accent-hover); }
 
 .setting--stack { display: block; }
 
+/* Minus / value / plus. The value keeps a fixed width so the row does not
+ * shuffle as the number changes under the pointer. */
+.tuner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex: none;
+}
+
+.tuner .setting__value {
+  min-width: 62px;
+  text-align: center;
+}
+
 .labelset { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-3); }
 
 .label-chip {
@@ -1147,6 +1161,50 @@ a:hover { color: var(--accent-hover); }
 }
 
 .statusbar__guarantee { color: var(--accent); }
+
+/* Why the picture is covered. Lives in the status bar so it is readable
+ * without sitting on top of the film. */
+.cover-why {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 2px var(--sp-4) 2px var(--sp-3);
+  border-radius: var(--r-badge);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-line);
+  max-width: 60vw;
+  overflow: hidden;
+}
+
+.cover-why__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+
+.cover-why__label {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono-sm);
+  letter-spacing: var(--tracking-badge);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.cover-why__score { font-size: var(--t-mono-sm); color: var(--accent-soft); }
+.cover-why__meta  { font-size: var(--t-mono-sm); color: var(--text-5); white-space: nowrap; }
+
+/* A run seen in a single sampled frame is the shape a false positive takes,
+ * so it is flagged rather than presented with the same confidence. */
+.cover-why.is-thin {
+  background: var(--warn-bg);
+  border-color: var(--warn-line);
+}
+
+.cover-why.is-thin .cover-why__dot  { background: var(--warn); }
+.cover-why.is-thin .cover-why__label { color: var(--warn); }
+.cover-why.is-thin .cover-why__score { color: var(--warn-text-2); }
 
 /* Thin scrollbars that match the palette instead of the OS default. */
 * {

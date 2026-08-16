@@ -16,7 +16,7 @@ use std::process::{Child, Command, Stdio};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 
-use scrim_core::{Detection, Detector, Plan, Source, SCHEMA_VERSION};
+use scrim_core::{DetBox, Detection, Detector, Plan, Source, SCHEMA_VERSION};
 
 use crate::nudenet::{is_explicit, NudeDetector};
 use crate::probe::{probe, VideoInfo};
@@ -32,6 +32,15 @@ pub const SAMPLE_FPS: f64 = 3.0;
 /// `0.550000011920929` into a document people read.
 pub const THRESHOLD_F64: f64 = 0.55;
 pub const THRESHOLD: f32 = THRESHOLD_F64 as f32;
+
+/// Detections weaker than this are not written down at all.
+///
+/// Deliberately below the covering threshold. Plans store what was *seen*, and
+/// coverage is derived from them afterwards, so recording a margin below the
+/// cutoff is what lets someone lower the threshold later and have the extra
+/// detections already be there. Recording everything would bloat the file with
+/// noise nobody will ever want.
+pub const RECORD_FLOOR: f32 = 0.35;
 /// The detector input is capped at this width to keep the pipe cheap.
 const MAX_DETECT_WIDTH: i64 = 1280;
 
@@ -198,6 +207,7 @@ fn run(
 
     let started = std::time::Instant::now();
     let mut index = 0u64;
+    let mut covering = 0usize;
 
     loop {
         if shared.stop.load(Ordering::Relaxed) {
@@ -211,20 +221,31 @@ fn run(
         index += 1;
 
         let found = detector.detect(&buf, dw as usize, dh as usize)?;
-        let boxes: Vec<[i64; 4]> = found
+        let boxes: Vec<DetBox> = found
             .iter()
-            .filter(|d| is_explicit(d.label()) && d.score >= THRESHOLD)
+            .filter(|d| is_explicit(d.label()) && d.score >= RECORD_FLOOR)
             .map(|d| {
                 let [x1, y1, x2, y2] = d.corners();
-                [
-                    (x1 as f64 * sx) as i64,
-                    (y1 as f64 * sy) as i64,
-                    (x2 as f64 * sx) as i64,
-                    (y2 as f64 * sy) as i64,
-                ]
+                DetBox {
+                    bounds: [
+                        (x1 as f64 * sx) as i64,
+                        (y1 as f64 * sy) as i64,
+                        (x2 as f64 * sx) as i64,
+                        (y2 as f64 * sy) as i64,
+                    ],
+                    label: d.label().to_string(),
+                    score: round3(d.score as f64),
+                }
             })
             .collect();
 
+        // Counted separately from what gets stored. The plan records down to
+        // RECORD_FLOOR so the threshold stays adjustable afterwards, but
+        // "found" in the interface should mean "would be covered", not
+        // "was noticed and filed away".
+        if boxes.iter().any(|b| b.score >= THRESHOLD_F64) {
+            covering += 1;
+        }
         if !boxes.is_empty() {
             shared.detections.lock().unwrap().push(Detection {
                 t: round3(t),
@@ -234,7 +255,7 @@ fn run(
 
         let mut p = shared.progress.lock().unwrap();
         p.frontier = t;
-        p.detections = shared.detections.lock().unwrap().len();
+        p.detections = covering;
         let elapsed = started.elapsed().as_secs_f64();
         p.speed = if elapsed > 0.0 { t / elapsed } else { 0.0 };
     }

@@ -32,14 +32,33 @@ CENSOR_CHOICES = {
 }
 
 
-def scanner_from_plan(plan: dict) -> livescan.LiveScanner:
-    """A LiveScanner with its detections restored, skipping __init__'s probe."""
+def scanner_from_plan(plan: dict, threshold: float) -> livescan.LiveScanner:
+    """A LiveScanner with its detections restored, skipping __init__'s probe.
+
+    Handles both plan schemas: v1 stored each box as a bare [x1,y1,x2,y2]
+    array, v2 stores {"box": [...], "label": ..., "score": ...} so the player
+    can say why it is covering something. Plans also record below the covering
+    threshold, so filtering happens here rather than at scan time.
+    """
     ls = object.__new__(livescan.LiveScanner)
     src = plan["source"]
     ls.src_w = src["width"]
     ls.src_h = src["height"]
     ls.duration = src["duration"]
-    ls._dets = [(d["t"], [tuple(b) for b in d["boxes"]]) for d in plan["detections"]]
+
+    dets = []
+    for d in plan["detections"]:
+        boxes = []
+        for b in d["boxes"]:
+            if isinstance(b, dict):
+                if b.get("score", 0.0) >= threshold:
+                    boxes.append(tuple(b["box"]))
+            else:
+                boxes.append(tuple(b))  # v1 was filtered when written
+        if boxes:
+            dets.append((d["t"], boxes))
+    ls._dets = dets
+
     ls._win_cache = (-1, [])
     import threading
     ls._lock = threading.Lock()
@@ -54,7 +73,7 @@ def main():
     for plan_path in sorted(FIX.glob("*.plan.json")):
         stem = plan_path.name.replace(".plan.json", "")
         plan = json.loads(plan_path.read_text(encoding="utf-8"))
-        ls = scanner_from_plan(plan)
+        ls = scanner_from_plan(plan, livescan.THRESHOLD)
 
         wins = ls.windows()
         out = {

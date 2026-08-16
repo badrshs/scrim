@@ -55,6 +55,9 @@ struct Playback {
     duration: f64,
     paused: bool,
     coverage: Option<Coverage>,
+    /// Kept so changing a timing or detection setting re-derives coverage from
+    /// the detections already on disk instead of forcing a rescan.
+    plan: Option<Plan>,
     frame: (i64, i64),
     paused_by_fence: bool,
     /// Live mode waits this long before starting playback.
@@ -88,6 +91,8 @@ impl App {
             pad_before: s.lead_before,
             pad_after: s.hold_after,
             margin: s.margin,
+            threshold: s.threshold,
+            min_run: s.min_run,
             ..WindowParams::default()
         }
     }
@@ -151,6 +156,8 @@ struct PlaybackState {
     fence_resume_in: Option<f64>,
     fence_reason: Option<String>,
     casting: Option<String>,
+    /// Why the picture is covered right now, if it is.
+    cover: Option<scrim_core::Reason>,
 }
 
 // ============================================================ commands ====
@@ -209,17 +216,36 @@ fn get_settings(app: State<'_, App>) -> Settings {
 async fn set_settings(app: State<'_, App>, settings: Settings) -> Result<(), String> {
     {
         let mut store = app.store.lock().unwrap();
-        store.settings = settings;
+        store.settings = settings.sanitised();
         store.save();
     }
-    // The censor style and volume apply to a running movie immediately.
+
+    // Coverage is derived from the plan's raw detections, so the timing and
+    // detection settings re-apply to whatever is playing straight away. This
+    // is the whole reason plans store detections rather than finished windows:
+    // changing the lead, or ignoring single-frame runs, must not mean
+    // rescanning an hour of film.
+    let params = app.window_params();
     let style = app.style();
+    let rebuilt = {
+        let mut pb = app.playback.lock().unwrap();
+        match (&pb.file, &pb.plan) {
+            (Some(_), Some(plan)) => {
+                let coverage = Coverage::from_plan(plan, &params);
+                let graph = coverage.graph(pb.frame.0, pb.frame.1, style);
+                pb.last_window_count = coverage.windows.len();
+                pb.coverage = Some(coverage);
+                Some(graph)
+            }
+            _ => None,
+        }
+    };
+
     let volume = app.store.lock().unwrap().settings.volume;
     if let Some(mpv) = app.mpv.lock().await.as_ref() {
         mpv.set_volume(volume);
-        let pb = app.playback.lock().unwrap();
-        if let Some(cov) = &pb.coverage {
-            mpv.set_filtergraph(&cov.graph(pb.frame.0, pb.frame.1, style));
+        if let Some(graph) = rebuilt {
+            mpv.set_filtergraph(&graph);
         }
     }
     Ok(())
@@ -233,6 +259,8 @@ fn library_list(app: State<'_, App>) -> Vec<MovieInfo> {
         pad_before: store.settings.lead_before,
         pad_after: store.settings.hold_after,
         margin: store.settings.margin,
+        threshold: store.settings.threshold,
+        min_run: store.settings.min_run,
         ..WindowParams::default()
     };
 
@@ -385,7 +413,7 @@ async fn play(
     let params = app.window_params();
     let style = app.style();
 
-    let (coverage, frame, duration) = if live {
+    let (coverage, frame, duration, source_plan) = if live {
         // Reuse a scan already in flight for this movie, otherwise start one.
         let existing = app.scans.lock().unwrap().get(&path).cloned();
         let scan = match existing {
@@ -406,6 +434,7 @@ async fn play(
             Coverage::from_plan(&plan, &params),
             (info.width, info.height),
             info.duration,
+            Some(plan),
         )
     } else {
         // Fail closed: scanned-plan mode will not play without a plan it can
@@ -427,6 +456,7 @@ async fn play(
             Coverage::from_plan(&plan, &params),
             (plan.source.width, plan.source.height),
             plan.source.duration,
+            Some(plan),
         )
     };
 
@@ -442,6 +472,7 @@ async fn play(
             mode: Some(if live { Mode::Live } else { Mode::ScannedPlan }),
             duration,
             coverage: Some(coverage),
+            plan: source_plan,
             frame,
             head_start_until: live.then(|| Instant::now() + head_start),
             started: !live,
@@ -745,6 +776,9 @@ async fn cast_start(app: State<'_, App>, host: String) -> Result<String, String>
             y: w.y,
             w: w.w,
             h: w.h,
+            // The reason is for explaining the picture on screen. A cast
+            // stream has the cover burned in and no interface to explain it.
+            reason: Default::default(),
         })
         .collect();
 
@@ -944,6 +978,7 @@ fn refresh_live_coverage(app: &State<'_, App>, file: &Path) -> bool {
         pb.duration = plan.source.duration;
     }
     pb.coverage = Some(coverage);
+    pb.plan = Some(plan);
     changed
 }
 
@@ -1019,6 +1054,11 @@ fn snapshot(app: &State<'_, App>, frontier: f64, complete: bool) -> PlaybackStat
             .unwrap()
             .as_ref()
             .map(|c| c.device_name().to_string()),
+        cover: pb
+            .coverage
+            .as_ref()
+            .and_then(|c| c.reason_at(pb.position))
+            .cloned(),
     }
 }
 

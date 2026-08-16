@@ -249,21 +249,33 @@
               <div class="setting__name">Lead before</div>
               <div class="setting__hint">start covering this long before a detection</div>
             </div>
-            <span class="setting__value" id="v-lead">5.0 s</span>
+            <div class="tuner">
+              <button class="stepper" data-tune="leadBefore" data-step="-0.5">&#8722;</button>
+              <span class="setting__value" id="v-lead">5.0 s</span>
+              <button class="stepper" data-tune="leadBefore" data-step="0.5">+</button>
+            </div>
           </div>
           <div class="setting">
             <div class="setting__text">
               <div class="setting__name">Hold after</div>
               <div class="setting__hint">keep covering this long afterwards</div>
             </div>
-            <span class="setting__value" id="v-hold">10.0 s</span>
+            <div class="tuner">
+              <button class="stepper" data-tune="holdAfter" data-step="-1">&#8722;</button>
+              <span class="setting__value" id="v-hold">10.0 s</span>
+              <button class="stepper" data-tune="holdAfter" data-step="1">+</button>
+            </div>
           </div>
           <div class="setting">
             <div class="setting__text">
               <div class="setting__name">Live head start</div>
               <div class="setting__hint">how far ahead detection gets before playback begins</div>
             </div>
-            <span class="setting__value" id="v-head">5 min</span>
+            <div class="tuner">
+              <button class="stepper" data-tune="headStartMinutes" data-step="-1">&#8722;</button>
+              <span class="setting__value" id="v-head">5 min</span>
+              <button class="stepper" data-tune="headStartMinutes" data-step="1">+</button>
+            </div>
           </div>
           <div class="setting">
             <div class="setting__text">
@@ -276,12 +288,32 @@
 
         <div class="settings__col">
           <div class="eyebrow">Detection</div>
+
+          <!-- The lever that actually stops unrelated scenes being covered. -->
+          <div class="setting">
+            <div class="setting__text">
+              <div class="setting__name">Ignore single glimpses</div>
+              <div class="setting__hint" id="minrun-hint">
+                detections in a row needed before anything is covered
+              </div>
+            </div>
+            <div class="tuner">
+              <button class="stepper" data-tune="minRun" data-step="-1">&#8722;</button>
+              <span class="setting__value" id="v-minrun">1</span>
+              <button class="stepper" data-tune="minRun" data-step="1">+</button>
+            </div>
+          </div>
+
           <div class="setting">
             <div class="setting__text">
               <div class="setting__name">Confidence cutoff</div>
-              <div class="setting__hint">NudeNet score below which a region is ignored</div>
+              <div class="setting__hint">real nudity scores about 0.55 to 0.72, so past 0.70 this starts removing true detections</div>
             </div>
-            <span class="setting__value" id="v-threshold">0.55</span>
+            <div class="tuner">
+              <button class="stepper" data-tune="threshold" data-step="-0.05">&#8722;</button>
+              <span class="setting__value" id="v-threshold">0.55</span>
+              <button class="stepper" data-tune="threshold" data-step="0.05">+</button>
+            </div>
           </div>
           <div class="setting">
             <div class="setting__text">
@@ -329,6 +361,16 @@
   <div class="statusbar">
     <span class="statusbar__guarantee">&#9679; fail-closed</span>
     <span id="status-engine">ready</span>
+
+    <!-- Why the picture is covered, the moment it is. An unexplained black
+         box is not something a viewer can judge; a labelled one is. -->
+    <span class="cover-why hidden" id="cover-why">
+      <span class="cover-why__dot"></span>
+      <span class="cover-why__label" id="cover-label"></span>
+      <span class="cover-why__score mono" id="cover-score"></span>
+      <span class="cover-why__meta mono" id="cover-meta"></span>
+    </span>
+
     <span class="spacer"></span>
     <span id="mode-label"></span>
   </div>
