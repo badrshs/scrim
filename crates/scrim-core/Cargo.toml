@@ -1,0 +1,15 @@
+[package]
+name = "scrim-core"
+description = "Censor plan schema, window building, and ffmpeg filtergraph construction."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+# Deliberately dependency-light. This crate decides what gets covered on
+# screen, so it must be testable without a video file, a GPU, or a window.
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }

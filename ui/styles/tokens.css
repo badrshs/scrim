@@ -1,0 +1,232 @@
+/* Scrim design tokens.
+ *
+ * The dark palette is lifted verbatim from the Claude Design mock rather than
+ * reinterpreted. The light palette is derived from it, preserving each token's
+ * role and contrast relationship while moving luminance.
+ *
+ * Themes are applied as a class, not a media query, so that the same palette
+ * definition can be attached to two different things:
+ *
+ *   <html class="theme-dark">   the whole app follows the user's setting
+ *   <div class="theme-dark">    the video stage, ALWAYS, in either theme
+ *
+ * That second use is the important one. See "stage-dark is invariant" below.
+ */
+
+/* ---------------------------------------------------------------- dark ---- */
+
+.theme-dark {
+  color-scheme: dark;
+
+  /* surfaces, from furthest back to furthest forward */
+  --canvas:        #05070A;
+  --app:           #0A0C0E;
+  --chrome:        #0E1216;
+  --stage:         #07090B;
+  --surface:       #12171C;
+  --raised:        #161C22;
+  --raised-2:      #1A2226;
+  --sunken:        #0C1114;
+  --control:       #111619;
+
+  /* hairlines. subtle separates, line encloses, strong encloses a surface
+     that is already floating, hover is the interactive response */
+  --line-subtle:   #1D242A;
+  --line:          #232B32;
+  --line-strong:   #2A333B;
+  --line-hover:    #3A454E;
+
+  /* text, brightest to faintest */
+  --text-bright:   #FFFFFF;
+  --text:          #E7ECF0;
+  --text-2:        #C6D0D7;
+  --text-3:        #9AA5AD;
+  --text-4:        #8A959E;
+  --text-5:        #6E7C86;
+  --text-6:        #5C666E;
+
+  /* teal: "this is covered, the guarantee is holding" */
+  --accent:        #4FE3C1;
+  --accent-hover:  #7FF0D8;
+  --accent-soft:   #7FD9C6;
+  --accent-bg:     #0C1E1C;
+  --accent-line:   #1F4A44;
+  --accent-fg:     #05100E;
+
+  /* amber: "detection is still catching up, do not go past here" */
+  --warn:          #F2A94B;
+  --warn-text:     #C9A874;
+  --warn-text-2:   #E0B878;
+  --warn-bg:       #1E1406;
+  --warn-bg-2:     #14120C;
+  --warn-line:     #4A3312;
+  --warn-track:    #2A2113;
+  --warn-track-2:  #3A2A10;
+
+  --danger:        #C42B1C;
+  --danger-fg:     #FFFFFF;
+
+  /* seek bar */
+  --track:         #242C33;
+  --track-2:       #2A3238;
+  --marker:        #6E7C86;
+  --marker-active: #E7ECF0;
+
+  --shadow-menu:   0 20px 50px rgba(0, 0, 0, .6);
+  --shadow-modal:  0 30px 70px rgba(0, 0, 0, .65);
+  --shadow-drawer: 24px 0 60px rgba(0, 0, 0, .5);
+  --scrim-veil:    rgba(4, 6, 8, .62);
+  --stage-fade:    linear-gradient(to bottom, rgba(7, 9, 11, 0), rgba(7, 9, 11, .93) 42%);
+  --overlay-panel: rgba(7, 9, 11, .62);
+}
+
+/* --------------------------------------------------------------- light ---- */
+
+.theme-light {
+  color-scheme: light;
+
+  --canvas:        #E8ECEF;
+  --app:           #FFFFFF;
+  --chrome:        #F5F7F8;
+  --stage:         #07090B;   /* letterboxing stays black in every theme */
+  --surface:       #FFFFFF;
+  --raised:        #F2F5F6;
+  --raised-2:      #E9EEF1;
+  --sunken:        #F7F9FA;
+  --control:       #FFFFFF;
+
+  --line-subtle:   #E3E8EB;
+  --line:          #D5DCE1;
+  --line-strong:   #C2CBD2;
+  --line-hover:    #9AA5AD;
+
+  --text-bright:   #000000;
+  --text:          #0E1216;
+  --text-2:        #3A454E;
+  --text-3:        #4E5860;
+  --text-4:        #5C666E;
+  --text-5:        #78838C;
+  --text-6:        #8A959E;
+
+  /* The mock's teal is ~1.6:1 on white and unreadable. Hue and role are kept,
+     luminance is dropped until it clears 4.5:1 for text and 3:1 for borders. */
+  --accent:        #0E8C74;
+  --accent-hover:  #0A6E5B;
+  --accent-soft:   #0B7A65;
+  --accent-bg:     #E6F7F3;
+  --accent-line:   #A8E0D3;
+  --accent-fg:     #FFFFFF;
+
+  --warn:          #B4700C;
+  --warn-text:     #8A5709;
+  --warn-text-2:   #7A4D08;
+  --warn-bg:       #FDF3E3;
+  --warn-bg-2:     #FEF8EE;
+  --warn-line:     #E8CB9A;
+  --warn-track:    #F0DFC0;
+  --warn-track-2:  #E5D0A8;
+
+  --danger:        #C42B1C;
+  --danger-fg:     #FFFFFF;
+
+  --track:         #D5DCE1;
+  --track-2:       #DDE3E7;
+  --marker:        #9AA5AD;
+  --marker-active: #0E1216;
+
+  --shadow-menu:   0 16px 40px rgba(16, 24, 32, .14);
+  --shadow-modal:  0 24px 60px rgba(16, 24, 32, .20);
+  --shadow-drawer: 24px 0 60px rgba(16, 24, 32, .12);
+  --scrim-veil:    rgba(20, 28, 36, .38);
+  --stage-fade:    linear-gradient(to bottom, rgba(7, 9, 11, 0), rgba(7, 9, 11, .93) 42%);
+  --overlay-panel: rgba(7, 9, 11, .62);
+}
+
+/* ------------------------------------------- stage-dark is invariant ------ */
+/*
+ * The video area and everything floating on top of it keep the dark palette in
+ * both themes: the control bar, the status readout, the live-scan banner, the
+ * fence dialog. A white control bar over a movie frame blows out the picture
+ * and hurts in a dark room, which is why YouTube and VLC make the same call.
+ *
+ * Light theme owns the window chrome, the library drawer, Settings, and the
+ * cast dialog. Those are places you read, not places you watch.
+ *
+ * This is expressed by putting .theme-dark on the stage element itself, so the
+ * cascade hands its children dark tokens no matter what <html> says. There is
+ * no second copy of the palette to keep in sync.
+ */
+
+/* -------------------------------------------------------------- shared ---- */
+
+:root {
+  /* Type. Two families, three jobs. Plex Sans carries the interface, Plex Mono
+     carries every number, timecode, filename, and constant name, because in
+     this app those are data the viewer is being asked to trust. */
+  --font-ui:   "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* Type scale, matching the mock's sizes rather than a generic ramp. */
+  --t-mono-xs:  10px;
+  --t-mono-sm:  10.5px;
+  --t-mono:     11px;
+  --t-mono-lg:  12px;
+  --t-mono-xl:  12.5px;
+  --t-xs:       11px;
+  --t-sm:       12px;
+  --t-base:     12.5px;
+  --t-md:       13px;
+  --t-lg:       14px;
+  --t-xl:       15px;
+
+  --w-regular: 400;
+  --w-medium:  500;
+  --w-semi:    600;
+
+  /* The uppercase mono eyebrow used for STATE / VOL / SUB / CENSOR labels. */
+  --tracking-eyebrow: .14em;
+  --tracking-badge:   .06em;
+
+  /* Radii, from the mock: 3px badges, 5px controls, 6-8px surfaces. */
+  --r-badge:   3px;
+  --r-sm:      4px;
+  --r-control: 5px;
+  --r-card:    6px;
+  --r-panel:   7px;
+  --r-window:  8px;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 6px;
+  --sp-3: 8px;
+  --sp-4: 10px;
+  --sp-5: 12px;
+  --sp-6: 14px;
+  --sp-7: 16px;
+  --sp-8: 20px;
+  --sp-9: 22px;
+  --sp-10: 26px;
+
+  /* Fixed chrome heights */
+  --h-titlebar:  40px;
+  --h-statusbar: 26px;
+  --h-control:   34px;
+  --h-button:    36px;
+  --w-drawer:    452px;
+
+  --dur-fast: 90ms;
+  --dur:      160ms;
+  --ease:     cubic-bezier(.2, .6, .3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur:      0ms;
+  }
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

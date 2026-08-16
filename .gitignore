@@ -1,0 +1,56 @@
+# Media. There is a 640 MB test movie in this folder; none of it belongs in git.
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.webm
+*.m4v
+*.m2ts
+*.mts
+*.srt
+*.ass
+*.ssa
+*.vtt
+*.sub
+
+# Scan output and per-user state
+*.censorplan.json
+*.censorplan.preview.html
+*.plan.json
+current_play.conf
+library.json
+settings.json
+
+# ...but the checked-in test fixtures are the exception: they are small JSON
+# and the Rust test suite is meaningless without them.
+!crates/scrim-core/tests/fixtures/*.plan.json
+!crates/scrim-core/tests/fixtures/*.graphs.json
+
+# Bundled third-party binaries, fetched by tools/fetch-resources.ps1 at build
+# time. Roughly 150 MB, and not ours to redistribute through the repo.
+/resources/*.exe
+/resources/*.dll
+/resources/*.onnx
+
+# Rust
+/target/
+**/*.rs.bk
+
+# Node / Tauri frontend
+node_modules/
+/ui/dist/
+/src-tauri/target/
+/src-tauri/gen/
+
+# Legacy Python reference implementation
+.venv/
+__pycache__/
+*.py[cod]
+
+# Editors and OS
+.vs/
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+desktop.ini
