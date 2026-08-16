@@ -12,9 +12,9 @@
                     "license":  "GPL-2.0-or-later"
                 },
     "onnxruntime.dll":  {
-                            "url":  "https://github.com/microsoft/onnxruntime/releases/download/v1.20.1/onnxruntime-win-x64-1.20.1.zip",
-                            "sha256":  "4CB41E89B8BF30578E1DD95E9C40292D61974A4BFCD666409302C4F0C5AA8CE0",
-                            "bytes":  11569696,
+                            "url":  "https://github.com/microsoft/onnxruntime/releases/download/v1.28.0/onnxruntime-win-x64-1.28.0.zip",
+                            "sha256":  "18370C375F07357FA5874344A9D9AC17E6B6FE1EB18B1DD209D79483B4470257",
+                            "bytes":  15809848,
                             "license":  "MIT"
                         },
     "320n.onnx":  {
